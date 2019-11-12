@@ -1,19 +1,67 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component  } from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import {  createDrawerNavigator  } from 'react-navigation-drawer';
+import { createStackNavigator  } from 'react-navigation-stack';
+import styles from './styles/Styles';
+import HomeScreen from './screens/HomeScreen.component';
+import WeeklyScheduleScreen from './screens/WeeklyScheduleScreen.component';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+
+const headerConfigs = { 
+	headerTitleStyle: {
+	    marginRight: 'auto',
+	    marginLeft: 'auto',
+	    color: '#fff'
+	},
+	headerStyle: {
+	    backgroundColor: 'black',
+	}
+	    
+       }
+
+const HomeNavigator = createStackNavigator(
+    {
+   	 Home: HomeScreen,
+    },
+    {
+	defaultNavigationOptions: headerConfigs 
+    }
+);
+
+const WeeklyNavigator = createStackNavigator(
+    {
+	Weekly : WeeklyScheduleScreen,
+    },
+    {
+	defaultNavigationOptions: headerConfigs,
+    }
+)
+
+const DrawerNav = createDrawerNavigator({
+
+  Home: HomeNavigator,
+  'Weekly Schedule': WeeklyNavigator,
+
+},
+{
+    drawerBackgroundColor: 'black',
+    contentOptions : {
+	    activeTintColor: '#eb9834',
+	    inactiveTintColor: '#faf9f5',
+	}
+
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+)
+
+const AppContainer = createAppContainer(DrawerNav);
+
+export default class App extends Component {
+    render() {
+	return <AppContainer />;
+    }
+}
+
+
+

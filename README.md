@@ -7,6 +7,10 @@ An implementation of the the Where's Wass app in React Native
 - `react-native-gesture-handler`
 - `react-native-reanimated`
 - `react-native-screens`
+- `react-navigation-drawer`
+- `react-navigation-stack`
+
+Installed using `expo install {dependency}`
 
 
 

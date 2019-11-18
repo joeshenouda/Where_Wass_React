@@ -1,5 +1,5 @@
 import React, { Component  } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import styles from '../styles/Styles';
 import { FontAwesome  } from '@expo/vector-icons';
 
@@ -21,7 +21,11 @@ export default class HomeScreen extends Component {
 	return(
 	    <View style={ styles.container }>
 	    	<Text>Under Construction</Text>
-	    </View>
+
+		 <TouchableOpacity onPress={() => props.navigation.navigate('Queue')}>
+		 <Text>Add to Queue</Text>
+	   </TouchableOpacity>
+	   </View>
 	);
     }
 }

@@ -12,5 +12,6 @@ An implementation of the the Where's Wass app in React Native
 
 Installed using `expo install {dependency}`
 
+- `npm install --save firebase`
 
 

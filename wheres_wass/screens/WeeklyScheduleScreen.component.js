@@ -19,7 +19,7 @@ export default class WeeklyScheduleScreen extends Component {
     render() {
 	return(
 	    <View style = { styles.container  }>
-	    	<Text> Also under construction </Text>
+	    	<Text> DON'T USE </Text>
 	    </View>
 	);
     }

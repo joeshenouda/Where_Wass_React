@@ -59,7 +59,14 @@ const QueueNavigator = createStackNavigator(
 	defaultNavigationOptions: headerConfigs
 	}
 );
-
+const CustomDrawerContentComponent = props => (
+	<ScrollView>
+	<SafeAreaView style = {{ flex:1 }} forceInset={{ top: 'always' , horizontal: 'never' }}>
+		<Image style={{width:280, height:200}} source = {require('./assets/navigationheader.jpg')}/>
+		<DrawerItems {...props}/>
+	</SafeAreaView>
+	</ScrollView>
+)
 const DrawerNav = createDrawerNavigator({
 
   Home: HomeNavigator,
@@ -73,7 +80,9 @@ const DrawerNav = createDrawerNavigator({
     contentOptions : {
 	    activeTintColor: '#eb9834',
 	    inactiveTintColor: '#faf9f5',
-	}
+	},
+	contentComponent : CustomDrawerContentComponent,
+	hideStatusBar : 'true'
 
 }
 

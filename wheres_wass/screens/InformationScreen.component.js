@@ -12,7 +12,9 @@ export default class InformationScreen extends Component {
 	return(
 	    <View style={ styles.container }>
 	    	<Text>One more Under Construction</Text>
-			<Text>Address:</Text>
+			<Text>Wadie's Hair Salon</Text>
+			<Text>Address: 716 NJ-18, East Brunswick, NJ 08816</Text>
+			<Text>Phone Number: (732) 432-9004</Text>
 	    </View>
 	);
     }

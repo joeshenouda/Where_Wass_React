@@ -1,17 +1,21 @@
 import React, { Component  } from 'react';
-import { StyleSheet, Text, View, Button, ScrollView, SafeAreaView, Image } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import { createAppContainer } from 'react-navigation';
-import {  createDrawerNavigator, DrawerItems  } from 'react-navigation-drawer';
+import {  createDrawerNavigator  } from 'react-navigation-drawer';
 import { createStackNavigator  } from 'react-navigation-stack';
 import styles from './styles/Styles';
 import HomeScreen from './screens/HomeScreen.component';
-import WeeklyScheduleScreen from './screens/WeeklyScheduleScreen.component';
+import WeeklyScheduleScreen from './screens/MonthlyScheduleScreen.component';
+import InformationScreen from './screens/InformationScreen.component';
+import Queue from './screens/QueueScreen.component'
+import QueueScreen from './screens/QueueScreen.component';
 
 
 const headerConfigs = { 
 	headerTitleStyle: {
-	    marginRight: 'auto',
-	    marginLeft: 'auto',
+		textAlign: 'center',
+		flexGrow:1,
+		alignSelf: 'center',
 	    color: '#fff'
 	},
 	headerStyle: {
@@ -38,21 +42,30 @@ const WeeklyNavigator = createStackNavigator(
     }
 )
 
-const CustomDrawerContentComponent = props => (
-    <ScrollView>
-    <SafeAreaView style = {{ flex:1 }} forceInset={{ top: 'always' , horizontal : 'never' }} >
-	<Image style={{width:280, height:200}} source = {require('./assets/navigationheader.jpg')}/> 
-	<DrawerItems  {...props} />
-    </SafeAreaView>
-    </ScrollView>
-)
+const InfoNavigator = createStackNavigator(
+	{
+		Info: InformationScreen
+	},
+	{
+	defaultNavigationOptions: headerConfigs
+	}
+);
 
-
+const QueueNavigator = createStackNavigator(
+	{
+		Queue: QueueScreen
+	},
+	{
+	defaultNavigationOptions: headerConfigs
+	}
+);
 
 const DrawerNav = createDrawerNavigator({
 
   Home: HomeNavigator,
-  'Weekly Schedule': WeeklyNavigator,
+  'Monthly Schedule': WeeklyNavigator,
+  'About Us': InfoNavigator,
+  'Queue': QueueNavigator,
 
 },
 {
@@ -60,9 +73,7 @@ const DrawerNav = createDrawerNavigator({
     contentOptions : {
 	    activeTintColor: '#eb9834',
 	    inactiveTintColor: '#faf9f5',
-	},
-    contentComponent : CustomDrawerContentComponent,
-    hideStatusBar : 'true'
+	}
 
 }
 

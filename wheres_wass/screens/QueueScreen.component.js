@@ -22,5 +22,8 @@ export default class QueueScreen extends Component {
 	    	<Text> Also under construction </Text>
 	    </View>
 	);
+
+	const style = StyleSheet.create({});
+
     }
 }

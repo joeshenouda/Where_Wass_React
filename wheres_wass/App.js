@@ -9,6 +9,7 @@ import WeeklyScheduleScreen from './screens/MonthlyScheduleScreen.component';
 import InformationScreen from './screens/InformationScreen.component';
 import Queue from './screens/QueueScreen.component'
 import QueueScreen from './screens/QueueScreen.component';
+import AgendaScreen from './screens/MonthlyScheduleScreen.component2';
 
 
 const headerConfigs = { 
@@ -59,6 +60,14 @@ const QueueNavigator = createStackNavigator(
 	defaultNavigationOptions: headerConfigs
 	}
 );
+const AgendaNavigator = createStackNavigator(
+	{
+		Agenda: AgendaScreen
+	},
+	{
+	defaultNavigationOptions: headerConfigs
+	}
+);
 const CustomDrawerContentComponent = props => (
 	<ScrollView>
 	<SafeAreaView style = {{ flex:1 }} forceInset={{ top: 'always' , horizontal: 'never' }}>
@@ -73,6 +82,7 @@ const DrawerNav = createDrawerNavigator({
   'Monthly Schedule': WeeklyNavigator,
   'About Us': InfoNavigator,
   'Queue': QueueNavigator,
+  'Agenda': AgendaNavigator,
 
 },
 {

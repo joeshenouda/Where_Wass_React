@@ -19,7 +19,7 @@ const aboutUsStyles = StyleSheet.create({
 
     headerStyle: {
     fontSize: 20,
-    fontStyle: 'bold',
+    fontWeight: 'bold',
     paddingTop: 20,
     paddingBottom: 20,
     color: 'white',

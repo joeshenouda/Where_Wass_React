@@ -1,7 +1,11 @@
 import React, { Component  } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, 
+		Text, 
+		View, 
+		Button,
+		Image, ScrollView, SafeAreaView } from 'react-native';
 import { createAppContainer } from 'react-navigation';
-import {  createDrawerNavigator  } from 'react-navigation-drawer';
+import {  createDrawerNavigator, DrawerItems  } from 'react-navigation-drawer';
 import { createStackNavigator  } from 'react-navigation-stack';
 import styles from './styles/Styles';
 import HomeScreen from './screens/HomeScreen.component';

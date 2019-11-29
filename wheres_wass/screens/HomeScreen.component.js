@@ -2,7 +2,10 @@ import React, { Component  } from 'react';
 import { StyleSheet, Text, View, Button, ImageBackground, Image} from 'react-native';
 import styles from '../styles/Styles';
 import { FontAwesome  } from '@expo/vector-icons';
-import firebaseDatabase from '../config';
+import firebase from '../config';
+
+//Initializing the database object from firebase
+firebaseDatabase = firebase.database();
 
 //To convert numerical day of week received by Date() object to string for Firebase
 let daysOfWeek  =['Sunday', 'Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday']

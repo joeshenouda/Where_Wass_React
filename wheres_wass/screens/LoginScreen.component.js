@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Button,TextInput,StyleSheet } from 'react-native';
 //Because facebookAppID not the default export must be wrapped in curly
-import firebase,{ facebookAppID } from '../config';
+import firebase,{facebookAppID} from '../config';
 import * as Facebook from 'expo-facebook';
 
 //Sets the onAuthStateChanged listener callback method
@@ -21,18 +21,18 @@ class Login extends Component {
     }
 
     async loginWithFacebook() {
-	console.log("Called loginWithFacebook");
+	await Facebook.initializeAsync(facebookAppID).then(console.log("Initialized Async"))
+
 	const { type, token } = await Facebook.logInWithReadPermissionsAsync(facebookAppID,
 	    {permissions: ['public_profile'] }
 	);
-	console.log("Finished the awaiting");
 
 	if (type === 'success'){
 	    //Build firebase credentials with the Facebook access token
 	    const credential = firebase.auth.FacebookAuthProvider.credential(token);
 
 	    //Sign in with credential from the facebook user
-	    firebase.auth().signInWithCredential(credential).catch((error) =>{
+	    firebase.auth().signInWithCredential(credential).then(this.props.navigation.navigate('Home')).catch((error) =>{
 		console.log("We have failed"+error.message)
 	    });
 	}

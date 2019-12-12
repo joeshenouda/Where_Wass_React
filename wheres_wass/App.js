@@ -1,9 +1,11 @@
 import React, { Component  } from 'react';
 import { StyleSheet, 
-		Text, 
-		View, 
-		Button,
-		Image, ScrollView, SafeAreaView } from 'react-native';
+	 Text, 
+	 View, 
+	 Button,
+	 Image, 
+         ScrollView, 
+         SafeAreaView } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import {  createDrawerNavigator, DrawerItems  } from 'react-navigation-drawer';
 import { createStackNavigator  } from 'react-navigation-stack';
@@ -11,7 +13,6 @@ import styles from './styles/Styles';
 import HomeScreen from './screens/HomeScreen.component';
 import WeeklyScheduleScreen from './screens/MonthlyScheduleScreen.component';
 import InformationScreen from './screens/InformationScreen.component';
-import Queue from './screens/QueueScreen.component'
 import QueueScreen from './screens/QueueScreen.component';
 import AgendaScreen from './screens/MonthlyScheduleScreen.component2';
 import LoginScreen from './screens/LoginScreen.component';
@@ -20,9 +21,7 @@ import LoginScreen from './screens/LoginScreen.component';
 
 const headerConfigs = { 
 	headerTitleStyle: {
-		textAlign: 'center',
-		flexGrow:1,
-		alignSelf: 'center',
+	    flexGrow:1,
 	    color: '#fff'
 	},
 	headerStyle: {

@@ -1,10 +1,20 @@
 import React, { Component  } from 'react';
 import { StyleSheet, 
+<<<<<<< Updated upstream
 		Text, 
 		View, 
 		Button,
 		Image, ScrollView, SafeAreaView } from 'react-native';
 import { createAppContainer } from 'react-navigation';
+=======
+	 Text, 
+	 View, 
+	 Button,
+	 Image, 
+         ScrollView, 
+         SafeAreaView } from 'react-native';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+>>>>>>> Stashed changes
 import {  createDrawerNavigator, DrawerItems  } from 'react-navigation-drawer';
 import { createStackNavigator  } from 'react-navigation-stack';
 import styles from './styles/Styles';
@@ -15,10 +25,11 @@ import Queue from './screens/QueueScreen.component'
 import QueueScreen from './screens/QueueScreen.component';
 import AgendaScreen from './screens/MonthlyScheduleScreen.component2';
 import LoginScreen from './screens/LoginScreen.component';
-
-
+import AccountScreen from './screens/AccountScreen.component';
+import CreateAccountScreen from './screens/CreateAccount.component';
 
 const headerConfigs = { 
+<<<<<<< Updated upstream
 	headerTitleStyle: {
 		textAlign: 'center',
 		flexGrow:1,
@@ -28,8 +39,17 @@ const headerConfigs = {
 	headerStyle: {
 	    backgroundColor: 'black',
 	}
+=======
+    headerTitleStyle: {
+	flexGrow:1,
+	color: '#fff'
+    },
+    headerStyle: {
+	backgroundColor: 'black',
+    }
+>>>>>>> Stashed changes
 	    
-       }
+}
 
 const HomeNavigator = createStackNavigator(
     {
@@ -38,7 +58,7 @@ const HomeNavigator = createStackNavigator(
     {
 	defaultNavigationOptions: headerConfigs 
     }
-);
+)
 
 const WeeklyNavigator = createStackNavigator(
     {
@@ -50,22 +70,22 @@ const WeeklyNavigator = createStackNavigator(
 )
 
 const InfoNavigator = createStackNavigator(
-	{
-		Info: InformationScreen
-	},
-	{
+    {
+	Info: InformationScreen
+    },
+    {
 	defaultNavigationOptions: headerConfigs
-	}
-);
+    }
+)
 
 const QueueNavigator = createStackNavigator(
-	{
-		Queue: QueueScreen
-	},
-	{
+    {
+	Queue: QueueScreen
+    },
+    {
 	defaultNavigationOptions: headerConfigs
-	}
-);
+    }
+)
 const AgendaNavigator = createStackNavigator(
 	{
 		Agenda: AgendaScreen
@@ -73,14 +93,22 @@ const AgendaNavigator = createStackNavigator(
 	{
 	defaultNavigationOptions: headerConfigs
 	}
-);
-
-const LoginNavigator = createStackNavigator(
+)
+const AccountNavigator = createStackNavigator(
     {
-	Login: LoginScreen
+        Account: {
+            screen : AccountScreen
+        },
+        Login: {
+            screen : LoginScreen
+        },
+        CreateAccount: {
+            screen : CreateAccountScreen
+        }
     },
     {
-	defaultNavigationOptions: headerConfigs
+        defaultNavigationOptions: headerConfigs,
+        initialRouteName : 'Account'
     }
 )
 const CustomDrawerContentComponent = props => (
@@ -91,15 +119,15 @@ const CustomDrawerContentComponent = props => (
 	</SafeAreaView>
 	</ScrollView>
 )
-const DrawerNav = createDrawerNavigator({
 
+
+const DrawerNav = createDrawerNavigator({
   Home: HomeNavigator,
   'Monthly Schedule': WeeklyNavigator,
   'About Us': InfoNavigator,
-  'Queue': QueueNavigator,
-  'Agenda': AgendaNavigator,
-  'Login' : LoginNavigator
-
+  Queue: QueueNavigator,
+  Agenda: AgendaNavigator,
+  Account : AccountNavigator
 },
 {
     drawerBackgroundColor: 'black',
@@ -107,9 +135,8 @@ const DrawerNav = createDrawerNavigator({
 	    activeTintColor: '#eb9834',
 	    inactiveTintColor: '#faf9f5',
 	},
-	contentComponent : CustomDrawerContentComponent,
-	hideStatusBar : 'true'
-
+     contentComponent : CustomDrawerContentComponent,
+     hideStatusBar : 'true',
 }
 
 )

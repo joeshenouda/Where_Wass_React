@@ -65,7 +65,7 @@ export default class HomeScreen extends Component {
 		});
 		
 	}
-	//TBH idek how this works
+	//Calls our listenForHours function once before rendering component
 	componentDidMount(){
 		this.listenForHours(this.business_hoursRef)
 	}

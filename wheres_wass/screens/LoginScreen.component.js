@@ -13,27 +13,7 @@ class Login extends Component {
 	};
     }
 
-<<<<<<< Updated upstream
-    async loginWithFacebook() {
-	console.log("Called loginWithFacebook");
-	const { type, token } = await Facebook.logInWithReadPermissionsAsync(facebookAppID,
-	    {permissions: ['public_profile'] }
-	);
-	console.log("Finished the awaiting");
-
-	if (type === 'success'){
-	    //Build firebase credentials with the Facebook access token
-	    const credential = firebase.auth.FacebookAuthProvider.credential(token);
-
-	    //Sign in with credential from the facebook user
-	    firebase.auth().signInWithCredential(credential).catch((error) =>{
-		console.log("We have failed"+error.message)
-	    });
-	}
-    }
-=======
     
->>>>>>> Stashed changes
 
     loginWithEmail(){
 		firebase.auth().signInWithEmailAndPassword(this.state.email,this.state.password).catch((error) => console.log("Failure in signing in with email and password"))

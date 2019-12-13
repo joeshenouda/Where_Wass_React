@@ -1,12 +1,5 @@
 import React, { Component  } from 'react';
 import { StyleSheet, 
-<<<<<<< Updated upstream
-		Text, 
-		View, 
-		Button,
-		Image, ScrollView, SafeAreaView } from 'react-native';
-import { createAppContainer } from 'react-navigation';
-=======
 	 Text, 
 	 View, 
 	 Button,
@@ -14,7 +7,6 @@ import { createAppContainer } from 'react-navigation';
          ScrollView, 
          SafeAreaView } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
->>>>>>> Stashed changes
 import {  createDrawerNavigator, DrawerItems  } from 'react-navigation-drawer';
 import { createStackNavigator  } from 'react-navigation-stack';
 import styles from './styles/Styles';
@@ -29,17 +21,6 @@ import AccountScreen from './screens/AccountScreen.component';
 import CreateAccountScreen from './screens/CreateAccount.component';
 
 const headerConfigs = { 
-<<<<<<< Updated upstream
-	headerTitleStyle: {
-		textAlign: 'center',
-		flexGrow:1,
-		alignSelf: 'center',
-	    color: '#fff'
-	},
-	headerStyle: {
-	    backgroundColor: 'black',
-	}
-=======
     headerTitleStyle: {
 	flexGrow:1,
 	color: '#fff'
@@ -47,7 +28,6 @@ const headerConfigs = {
     headerStyle: {
 	backgroundColor: 'black',
     }
->>>>>>> Stashed changes
 	    
 }
 

@@ -4,6 +4,12 @@ import styles from '../styles/Styles';
 import { FontAwesome  } from '@expo/vector-icons';
 import firebase from '../config';
 
+//Firebase current user
+let currUser = firebase.auth().currentUser;
+
+
+
+
 //Initializing the database object from firebase
 firebaseDatabase = firebase.database();
 
@@ -72,14 +78,23 @@ export default class HomeScreen extends Component {
 
 	//Setting the header for users to access nav drawer
     static navigationOptions = ({ navigation }) =>  {
-		return {
-		title: "Where's Wass",
-		headerLeft: () => (
-			<FontAwesome.Button name="bars" 
-			onPress ={ () => { navigation.toggleDrawer()}}
-			backgroundColor='black'
-			/>
-		),}
+		const headerObj = {
+			title: "Where's Wass",
+			
+			headerLeft: () => (
+				<FontAwesome.Button name="bars" 
+				onPress ={ () => { navigation.toggleDrawer()}}
+				backgroundColor='black'
+				/>
+			)
+		}
+		if (currUser != null && currUser.uid == wxvpFDGbWlQSVLtWiXepnkShU6D3){
+			headerObj['headerRight'] = () => (
+				<Button title='Admin' onPress={() => {navigation.navigate('AdminPortal')}}/>
+			)
+		}
+
+		return headerObj;
 	}
 	
     render(){

@@ -19,6 +19,7 @@ import AgendaScreen from './screens/MonthlyScheduleScreen.component2';
 import LoginScreen from './screens/LoginScreen.component';
 import AccountScreen from './screens/AccountScreen.component';
 import CreateAccountScreen from './screens/CreateAccount.component';
+import AdminPortalScreen from './screens/Admin.component';
 
 const headerConfigs = { 
     headerTitleStyle: {
@@ -33,7 +34,9 @@ const headerConfigs = {
 
 const HomeNavigator = createStackNavigator(
     {
-   	 Home: HomeScreen,
+        Home: HomeScreen,
+        AdminPortal : AdminPortalScreen
+
     },
     {
 	defaultNavigationOptions: headerConfigs 
@@ -66,6 +69,7 @@ const QueueNavigator = createStackNavigator(
 	defaultNavigationOptions: headerConfigs
     }
 )
+
 const AgendaNavigator = createStackNavigator(
 	{
 		Agenda: AgendaScreen

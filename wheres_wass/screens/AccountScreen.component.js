@@ -54,7 +54,7 @@ class Account extends Component{
 	if (this.state.user != null){
 	    return(
 		<View>
-		    <Text>Signed in as {this.state.user.displayName} </Text>
+	<Text>Signed in as uid {this.state.user.uid} {this.state.user.displayName} </Text>
 		    <Button title = 'Sign out' onPress = {() => firebase.auth().signOut().then( 
 			() => this.props.navigation.navigate('Home')
 		    )}/>

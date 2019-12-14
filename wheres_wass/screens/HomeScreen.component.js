@@ -4,6 +4,7 @@ import styles from '../styles/Styles';
 import { FontAwesome  } from '@expo/vector-icons';
 import firebase from '../config';
 
+
 //Initializing the database object from firebase
 firebaseDatabase = firebase.database();
 
@@ -62,24 +63,70 @@ export default class HomeScreen extends Component {
 				closingHour : snap.child('003_o_closing').val(),
 				working : snap.child('001_o_status').val()
 			})
+		    console.log('setState for Home was called')
 		});
 		
 	}
-	//TBH idek how this works
+	//Listen for admin will change the header bar by adding a button when the authState changes and is Wass
+	listenForAdmin(){
+		firebase.auth().onAuthStateChanged( (currUser) => {
+			if (currUser != null && currUser.uid =='wxvpFDGbWlQSVLtWiXepnkShU6D3'){
+				this.props.navigation.setParams({'admin': 'true'})
+			}
+			else{
+				this.props.navigation.setParams({'admin': 'false'})
+			}
+		})
+	}
+
+    	didFocusSubscription() {
+	    this.props.navigation.addListener('didFocus', () => {
+	    this.listenForHours(this.business_hoursRef)
+    	    console.log('didFocus called for HomeScreen')
+	})
+	}
+
+    	didBlurSubscription(){
+	    this.props.navigation.addListener('didBlur', () => { 
+	    this.business_hoursRef.off()
+	    console.log('didBlur called for HomeScreen')
+	})
+	}
+
+	//Calls our listenForHours function once before rendering component
 	componentDidMount(){
-		this.listenForHours(this.business_hoursRef)
+	    	console.log('componentDidMount for home was called')
+		//this.listenForHours(this.business_hoursRef)
+	    	this.didFocusSubscription()
+	    	this.didBlurSubscription()
+		this.listenForAdmin()
+	}
+
+	componentWillUnmount(){
+	    	console.log('componentWillUnmount for home was called')
+		this.business_hoursRef.off()
 	}
 
 	//Setting the header for users to access nav drawer
     static navigationOptions = ({ navigation }) =>  {
-		return {
-		title: "Where's Wass",
-		headerLeft: () => (
-			<FontAwesome.Button name="bars" 
-			onPress ={ () => { navigation.toggleDrawer()}}
-			backgroundColor='black'
-			/>
-		),}
+		const headerObj = {
+			title: "Where's Wass",
+			
+			headerLeft: () => (
+				<FontAwesome.Button name="bars" 
+				onPress ={ () => { navigation.toggleDrawer()}}
+				backgroundColor='black'
+				/>
+			)
+		}
+		//Checks if the person signed in is now Wass and adds a property to the headerObj for a button
+		if (navigation.getParam('admin','false') == 'true'){
+			headerObj['headerRight'] = () => (
+				<Button title='Admin' onPress={() => {navigation.navigate('AdminPortal')}}/>
+			)
+		}
+
+		return headerObj;
 	}
 	
     render(){
@@ -101,10 +148,11 @@ export default class HomeScreen extends Component {
 const Homestyles = StyleSheet.create({
 	statusBox: {
 		flex : 0.5,
+		width : 250,
 		justifyContent : 'center',
 		alignItems : 'center',
 		backgroundColor : 'black',
-		opacity : 0.8
+		opacity : 0.8,
 	},
 	statusText: {
 		color : 'white',

@@ -16,28 +16,31 @@ import InformationScreen from './screens/InformationScreen.component';
 import QueueScreen from './screens/QueueScreen.component';
 import AgendaScreen from './screens/MonthlyScheduleScreen.component2';
 import LoginScreen from './screens/LoginScreen.component';
-
-
+import AccountScreen from './screens/AccountScreen.component';
+import CreateAccountScreen from './screens/CreateAccount.component';
+import AdminPortalScreen from './screens/Admin.component';
 
 const headerConfigs = { 
-	headerTitleStyle: {
-	    flexGrow:1,
-	    color: '#fff'
-	},
-	headerStyle: {
-	    backgroundColor: 'black',
-	}
+    headerTitleStyle: {
+	flexGrow:1,
+	color: '#fff'
+    },
+    headerStyle: {
+	backgroundColor: 'black',
+    }
 	    
-       }
+}
 
 const HomeNavigator = createStackNavigator(
     {
-   	 Home: HomeScreen,
+        Home: HomeScreen,
+        AdminPortal : AdminPortalScreen
+
     },
     {
 	defaultNavigationOptions: headerConfigs 
     }
-);
+)
 
 const WeeklyNavigator = createStackNavigator(
     {
@@ -49,22 +52,23 @@ const WeeklyNavigator = createStackNavigator(
 )
 
 const InfoNavigator = createStackNavigator(
-	{
-		Info: InformationScreen
-	},
-	{
+    {
+	Info: InformationScreen
+    },
+    {
 	defaultNavigationOptions: headerConfigs
-	}
-);
+    }
+)
 
 const QueueNavigator = createStackNavigator(
-	{
-		Queue: QueueScreen
-	},
-	{
+    {
+	Queue: QueueScreen
+    },
+    {
 	defaultNavigationOptions: headerConfigs
-	}
-);
+    }
+)
+
 const AgendaNavigator = createStackNavigator(
 	{
 		Agenda: AgendaScreen
@@ -72,14 +76,22 @@ const AgendaNavigator = createStackNavigator(
 	{
 	defaultNavigationOptions: headerConfigs
 	}
-);
-
-const LoginNavigator = createStackNavigator(
+)
+const AccountNavigator = createStackNavigator(
     {
-	Login: LoginScreen
+        Account: {
+            screen : AccountScreen
+        },
+        Login: {
+            screen : LoginScreen
+        },
+        CreateAccount: {
+            screen : CreateAccountScreen
+        }
     },
     {
-	defaultNavigationOptions: headerConfigs
+        defaultNavigationOptions: headerConfigs,
+        initialRouteName : 'Account'
     }
 )
 const CustomDrawerContentComponent = props => (
@@ -90,15 +102,15 @@ const CustomDrawerContentComponent = props => (
 	</SafeAreaView>
 	</ScrollView>
 )
-const DrawerNav = createDrawerNavigator({
 
+
+const DrawerNav = createDrawerNavigator({
   Home: HomeNavigator,
   'Monthly Schedule': WeeklyNavigator,
   'About Us': InfoNavigator,
-  'Queue': QueueNavigator,
-  'Agenda': AgendaNavigator,
-  'Login' : LoginNavigator
-
+  Queue: QueueNavigator,
+  Agenda: AgendaNavigator,
+  Account : AccountNavigator
 },
 {
     drawerBackgroundColor: 'black',
@@ -106,9 +118,8 @@ const DrawerNav = createDrawerNavigator({
 	    activeTintColor: '#eb9834',
 	    inactiveTintColor: '#faf9f5',
 	},
-	contentComponent : CustomDrawerContentComponent,
-	hideStatusBar : 'true'
-
+     contentComponent : CustomDrawerContentComponent,
+     hideStatusBar : 'true',
 }
 
 )

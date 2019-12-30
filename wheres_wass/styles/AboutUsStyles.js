@@ -5,7 +5,7 @@ const aboutUsStyles = StyleSheet.create({
     container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     backgroundColor: 'black',
     },
 
@@ -18,11 +18,10 @@ const aboutUsStyles = StyleSheet.create({
     },
 
     headerStyle: {
-    fontSize: 20,
+    fontSize: 21,
     fontWeight: 'bold',
     paddingTop: 20,
-    paddingBottom: 20,
-    color: 'white',
+    color: 'red',
     fontFamily: 'serif',
     alignContent: 'center'
     },
@@ -31,7 +30,7 @@ const aboutUsStyles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
     fontFamily: 'serif',
-    justifyContent: 'space-evenly'
+    textAlign: 'center'
     }
 }
 );

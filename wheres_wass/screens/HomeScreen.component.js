@@ -29,6 +29,7 @@ const notWorkingLayout = () => {
 		<View style ={Homestyles.statusBox}>
 			<Text style={{ color: 'white', justifyContent: 'center', fontSize: 30,}}>Where's Wass</Text>
 			<Text style = {Homestyles.statusText}>OFF</Text>
+			<Text style = {Homestyles.statusText}>Tomorrow: </Text>
 		</View>
 	)
 }
@@ -149,7 +150,7 @@ const Homestyles = StyleSheet.create({
 	statusBox: {
 		flex : 0.5,
 		width : 250,
-		justifyContent : 'center',
+		justifyContent : 'space-between',
 		alignItems : 'center',
 		backgroundColor : 'black',
 		opacity : 0.8,

@@ -26,7 +26,7 @@ class Login extends Component {
 
     render(){
 	return(
-	    <View style={{flex : 1, justifyContent : "center", alignItems: "center"}}>
+	    <View style={{flex : 1, justifyContent : "center", alignItems: "center", backgroundColor: 'black'}}>
 	        <TextInput style = {style.textinput} autoCapitalize = 'none' placeholder = 'Enter Email' onChangeText = { (text) => this.setState({email : text}) } />	
 	    	<TextInput style = {style.textinput} autoCapitalize = 'none' placeholder = 'Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({password : text})} />
 	    	<Button title = 'Log in' onPress = {() => this.loginWithEmail()}/>

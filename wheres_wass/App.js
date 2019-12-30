@@ -11,7 +11,7 @@ import {  createDrawerNavigator, DrawerItems  } from 'react-navigation-drawer';
 import { createStackNavigator  } from 'react-navigation-stack';
 import styles from './styles/Styles';
 import HomeScreen from './screens/HomeScreen.component';
-import WeeklyScheduleScreen from './screens/MonthlyScheduleScreen.component';
+import WeeklyScheduleScreen from './screens/WeeklyScheduleScreen.component';
 import InformationScreen from './screens/InformationScreen.component';
 import QueueScreen from './screens/QueueScreen.component';
 import AgendaScreen from './screens/MonthlyScheduleScreen.component2';
@@ -68,15 +68,6 @@ const QueueNavigator = createStackNavigator(
 	defaultNavigationOptions: headerConfigs
     }
 )
-
-const AgendaNavigator = createStackNavigator(
-	{
-		Agenda: AgendaScreen
-	},
-	{
-	defaultNavigationOptions: headerConfigs
-	}
-)
 const AccountNavigator = createStackNavigator(
     {
         Account: {
@@ -106,10 +97,9 @@ const CustomDrawerContentComponent = props => (
 
 const DrawerNav = createDrawerNavigator({
   Home: HomeNavigator,
-  'Monthly Schedule': WeeklyNavigator,
+  'Weekly Schedule': WeeklyNavigator,
   'About Us': InfoNavigator,
   Queue: QueueNavigator,
-  Agenda: AgendaNavigator,
   Account : AccountNavigator
 },
 {

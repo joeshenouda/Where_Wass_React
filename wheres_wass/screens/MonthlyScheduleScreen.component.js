@@ -5,7 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 
 
-export default class WeeklyScheduleScreen extends Component {
+export default class MonthlyScheduleScreen extends Component {
     static navigationOptions = ({navigation}) => {
 	return {
 	title: "Monthly Schedule",

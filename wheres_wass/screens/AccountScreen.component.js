@@ -3,6 +3,7 @@ import { View, Text, Button, TextInput, StyleSheet  } from 'react-native';
 import firebase,{facebookAppID} from '../config';
 import * as Facebook from 'expo-facebook';
 import { FontAwesome } from '@expo/vector-icons';
+import accountStyles from '../styles/AccountStyles';
 
 class Account extends Component{
     constructor(props){
@@ -63,8 +64,7 @@ class Account extends Component{
     }
 	else{
 	    return(
-		<View style = {{flex: 1 , justifyContent : 'center', alignItems : 'center'}}>
-		    <Text>You are not signed in</Text>
+		<View style = {accountStyles.container}>
 				<Button title = 'Login with Email' onPress= {() => this.props.navigation.navigate('Login') } />
 				<Text> OR </Text>
 				<Button title = 'Login with Facebook' onPress = {() => this.loginWithFacebook()}/>

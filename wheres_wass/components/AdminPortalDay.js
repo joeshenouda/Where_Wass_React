@@ -130,6 +130,7 @@ class AdminPortalDay extends Component{
   }
     
   componentDidMount(){
+    this.hoursRef.off()
     console.log('componentDidMount for AdminPortalDay was called')
     this.listenForHours(this.hoursRef)
   }

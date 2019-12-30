@@ -71,7 +71,7 @@ export default class HomeScreen extends Component {
 	//Listen for admin will change the header bar by adding a button when the authState changes and is Wass
 	listenForAdmin(){
 		firebase.auth().onAuthStateChanged( (currUser) => {
-			if (currUser != null && currUser.uid =='wxvpFDGbWlQSVLtWiXepnkShU6D3'){
+			if (currUser != null && (currUser.uid =='wxvpFDGbWlQSVLtWiXepnkShU6D3'|| currUser.uid == 'Fl410iXYnfM19EZODAY4mWKmehW2')){
 				this.props.navigation.setParams({'admin': 'true'})
 			}
 			else{

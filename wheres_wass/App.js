@@ -19,6 +19,7 @@ import LoginScreen from './screens/LoginScreen.component';
 import AccountScreen from './screens/AccountScreen.component';
 import CreateAccountScreen from './screens/CreateAccount.component';
 import AdminPortalScreen from './screens/Admin.component';
+import WaitlistScreen from './screens/WaitlistScreen.component';
 
 const headerConfigs = { 
     headerTitleStyle: {
@@ -34,7 +35,8 @@ const headerConfigs = {
 const HomeNavigator = createStackNavigator(
     {
         Home: HomeScreen,
-        AdminPortal : AdminPortalScreen
+        AdminPortal : AdminPortalScreen,
+        Waitlist: WaitlistScreen
 
     },
     {

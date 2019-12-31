@@ -67,6 +67,7 @@ export default class WeeklyScheduleScreen extends Component {
     render() {
 	return (
 		<ScrollView horizontal = {false} style = {{flex:2}}>
+				<View style = {styles.separator}/>
 	    		<WeeklyScheduleDay day = 'Monday' focus = {this.state.focusing} blur = {this.state.blurring}/>
 	    		<View style = {styles.separator}/>
 	    		<WeeklyScheduleDay day = 'Tuesday' focus = {this.state.focusing} blur = {this.state.blurring}/>

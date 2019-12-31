@@ -42,7 +42,8 @@ const style = StyleSheet.create({
 	borderColor : 'orange',
 	borderWidth : 2,
 	padding : 10,
-	width : 300
+	width : 300,
+	color : 'white'
 	
     }
 })

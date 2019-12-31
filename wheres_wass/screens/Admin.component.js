@@ -16,13 +16,17 @@ class AdminPortal extends Component{
     }
 
 
-    //Setting the header for users to access nav drawer
+    //Setting the header for navigation
     static navigationOptions = ({ navigation }) =>  {
 		const headerObj = {
 			title: "Where's Wass",
 			
 			headerLeft: () => (
 				<FontAwesome.Button name="home" onPress =  {() => navigation.navigate("Home")} backgroundColor = 'black'/>
+			),
+
+			headerRight: () => (
+				<Button title = 'Waitlist' onPress = {() => navigation.navigate('Waitlist')} color = 'orange'/>
 			)
         }
 

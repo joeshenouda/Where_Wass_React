@@ -9,7 +9,7 @@ import scheduleStyles from '../styles/ScheduleStyles';
 
 var { height } = Dimensions.get('window');
  
-var box_count = 7;
+var box_count = 8;
 var box_height = height / box_count;
 
 //Initializing the database object from firebase

@@ -143,6 +143,11 @@ export default class HomeScreen extends Component {
 						joinedWaitList : currUser ? (prevState.clientsInWait.includes(currUser.uid) ? true : false) : false
 					}))
 				}
+				else{
+					this.setState(prevState => ({
+						joinedWaitList : currUser ? (prevState.clientsInWait.includes(currUser.uid) ? true : false) : false
+					}))
+				}
 			}
 		})
 

@@ -45,35 +45,40 @@ class Account extends Component{
     componentDidMount(){
 		firebase.auth().onAuthStateChanged(
 			(currentUser) =>{
-			this.setState({user : currentUser})
-			console.log('Set the user state to currentUser making it '+this.state.user)
+				this.setState({user : currentUser})
 			}
 		)
 	}
 	
     render(){
-	if (this.state.user != null){
-	    return(
-		<View>
-	<Text>Signed in as uid {this.state.user.uid} {this.state.user.displayName} </Text>
-		    <Button title = 'Sign out' onPress = {() => firebase.auth().signOut().then( 
-			() => this.props.navigation.navigate('Home')
-		    )}/>
-		</View>
-	    )
-    }
-	else{
-	    return(
-		<View style = {accountStyles.container}>
-				<Button title = 'Login with Email' onPress= {() => this.props.navigation.navigate('Login') } />
-				<Text> OR </Text>
-				<Button title = 'Login with Facebook' onPress = {() => this.loginWithFacebook()}/>
-				<Text>OR</Text>
-				<Button title = 'Create account with Email' onPress = {() => this.props.navigation.navigate('CreateAccount')} />
+		if (this.state.user != null){
+			return(
+				<View style = {{flex:1,justifyContent:'center', alignContent :'center', backgroundColor:'black'}}>
+					<Text style={{fontSize:40, color : 'white'}}>Hello, Signed in as:</Text>
+					<View style = {{borderColor : 'orange', borderWidth : 4, margin:10}}>
+						<Text style={{borderColor:'orange', fontWeight:'bold', fontSize : 30, color:'white'}}>{this.state.user.displayName}</Text>	
+					</View>
+					<View style = {{borderColor : 'orange', borderWidth : 4, margin:10}}>
+						<Text style={{borderColor:'orange', fontWeight:'bold',fontSize : 25, color:'white'}}>{this.state.user.email}</Text> 
+					</View>
+					<Button title = 'Sign out'  color='orange'  onPress = {() => firebase.auth().signOut().then( () => this.props.navigation.navigate('Home'))}/>
 
-			</View>
-	    )
-	}
+
+				</View>
+			)
+		}
+		else{
+			return(
+			<View style = {accountStyles.container}>
+					<Button title = 'Login with Email' onPress= {() => this.props.navigation.navigate('Login') } />
+					<Text> OR </Text>
+					<Button title = 'Login with Facebook' onPress = {() => this.loginWithFacebook()}/>
+					<Text>OR</Text>
+					<Button title = 'Create account with Email' onPress = {() => this.props.navigation.navigate('CreateAccount')} />
+
+				</View>
+			)
+		}
     }
 }
 

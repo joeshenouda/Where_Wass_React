@@ -7,7 +7,7 @@ class CreateAccountScreen extends Component {
     constructor(props){
     super(props);
     this.state = {
-            email : '',
+        email : '',
         password : '',
         reenteredPS : '',
         name : '',
@@ -19,6 +19,16 @@ class CreateAccountScreen extends Component {
         firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch((errors) => {
             let errorCode = errors.code;
             let errorMessage = errors.message;
+            if(this.state.name = ''){
+                Alert.alert(
+                    'Could not Create Account',
+                    'Please enter your name',
+                    [
+                    {text: 'OK', onPress: () => console.log('OK Pressed')},
+                    ],
+                    {cancelable: false},
+                );
+            }
             if (errorCode == 'auth/weak-password'){
                 Alert.alert(
                     'Could not Create Account',
@@ -48,8 +58,11 @@ class CreateAccountScreen extends Component {
                             {
                                 displayName : this.state.name,
                             }
-                        )
-                        this.props.navigation.navigate('Account')
+                        ).then(() => {
+                                this.props.navigation.navigate('Account')
+                            }
+                        ).catch((error => console.log(error.message)))
+                        
                     }
                     else{
                         this.props.navigation.push('CreateAccount')
@@ -65,7 +78,7 @@ class CreateAccountScreen extends Component {
         <KeyboardAvoidingView
             contentContainerStyle={style.container}
             behavior = 'padding'>
-            <TextInput style = {style.input} placeholder = 'Enter Full Name' onChangeText = { (text) => this.setState({email : text}) } />	
+            <TextInput style = {style.input} placeholder = 'Enter Full Name' onChangeText = { (text) => this.setState({name : text}) } />	
             <TextInput style = {style.input} autoCapitalize = 'none' placeholder = 'Enter Phone number' keyboardType = 'number-pad' onChangeText = { (text) => this.setState({phoneNumber : text}) } />	
             <TextInput style = {style.input} autoCapitalize = 'none' placeholder = 'Enter Email' onChangeText = { (text) => this.setState({email : text}) } />	
             <TextInput style = {style.input} autoCapitalize = 'none' placeholder = 'Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({password : text})} />

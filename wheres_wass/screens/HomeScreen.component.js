@@ -15,73 +15,6 @@ let dayOfWeek = new Date().getDay()
 //object mapping uids to push ids
 let uid_to_pushRef = {}
 
-let addToWaitList = (props) => {
-	let user = firebase.auth().currentUser;
-	if (user == null){
-		// Works on both Android and iOS
-		Alert.alert(
-			//Alert
-			'User not logged in',
-			//Alert message
-			'You must sign in to use the waitlist feature',
-			[
-				{
-					text: 'Sign in',
-					onPress: () => props.navigation.navigate('Account')
-				},
-				{
-					text: 'Cancel',
-					onPress: () => console.log('Cancel Pressed'),
-					style: 'cancel',
-				},
-			],
-			{cancelable: false},
-		);
-	}
-	else{
-		firebaseDatabase.ref('waitList').push({uid : user.uid, name : user.displayName, email : user.email})
-	}
-}
-
-let removeFromWaitList = () => {
-	var parentPushRef = uid_to_pushRef[firebase.auth().currentUser.uid]
-	console.log('The push id is '+parentPushRef)
-
-	//Remove this child from the waitlist
-	firebaseDatabase.ref('waitList/'+parentPushRef).remove().then(
-		() => console.log('Successfully removed ' + firebase.auth().currentUser.uid+ ' from waitlist')
-	)
-}
-//Two layouts for switching b/t working and non working layouts
-const workingLayout = (props) => {
-	var waitlistButton = props.joinedWaitList ? <Button color = 'red' title = 'Leave Waitlist' onPress = {() => removeFromWaitList()}/> : 
-												<Button color = 'orange' title = 'Join waitlist' onPress = {() => addToWaitList(props)}/>
-
-	return(
-		<View style = {Homestyles.statusBox}>
-			<Text style={{ color: 'white', justifyContent: 'center', fontSize: 30,}}>Where's Wass?</Text>
-			<Text style = {{color: 'orange', justifyContent: 'center', fontSize : 25}}> Waitlist: {props.queueLength} clients</Text>
-			{waitlistButton}
-			<Text style = {Homestyles.statusText}>{props.startTime}</Text>
-			<Text style = {Homestyles.statusText}>to</Text>
-			<Text style = {Homestyles.statusText}>{props.endTime}</Text>
-			<Text style = {{fontSize : 15, color : 'white'}}>Tomorrow: </Text>
-
-		</View>
-	)
-}
-
-const notWorkingLayout = () => {
-	return(
-		<View style ={Homestyles.statusBox}>
-			<Text style={{ color: 'white', justifyContent: 'center', fontSize: 30,}}>Where's Wass?</Text>
-			<Text style = {Homestyles.statusText}>OFF</Text>
-			<Text style = {{fontSize : 12, color : 'white'}}>Tomorrow: </Text>
-		</View>
-	)
-}
-
-
 //Home component to show current hours
 export default class HomeScreen extends Component {
 	constructor(props){
@@ -90,30 +23,53 @@ export default class HomeScreen extends Component {
 			working: 'ON',
 			openingHour: 'Loading...',
 			closingHour: 'Loading...',
+			tomorrowWorking : 'OFF',
+			tomorrowOpeningHour : 'Loading...',
+			tomorrowClosingHour : 'Loading...',
 			queueLength : 0,
 			joinedWaitList : false,
 			clientsInWait : []
 		},
 		this.business_hoursRef = firebaseDatabase.ref('business_hours/'+daysOfWeek[dayOfWeek])
+		//Modulo (dayOfWeek+1) with 7 so that when dayOfWeek=6 it loops back to 0
+		this.business_hoursRefTomorrow = firebaseDatabase.ref('business_hours/'+daysOfWeek[(dayOfWeek+1)%7])
 		this.waitListRef = firebaseDatabase.ref('waitList');
 	}
 	//Called everytime a child changes on the database for the given day
-	listenForHours(FBref) {
+	listenForHours(FBref, isTomorrow) {
 
 		FBref.on('value', (snap) => {
-			this.setState({
-				openingHour : snap.child('002_o_opening').val(),
-				closingHour : snap.child('003_o_closing').val(),
-				working : snap.child('001_o_status').val()
-			})
+			if(isTomorrow){
+				this.setState({
+					tomorrowOpeningHour : snap.child('002_o_opening').val(),
+					tomorrowClosingHour : snap.child('003_o_closing').val(),
+					tomorrowWorking : snap.child('001_o_status').val()
+				})
+			}
+			else{
+				this.setState({
+					openingHour : snap.child('002_o_opening').val(),
+					closingHour : snap.child('003_o_closing').val(),
+					working : snap.child('001_o_status').val()
+				})
+			}
 		})
 
 		FBref.on('child_changed',(snap) => {
-			this.setState({
-				openingHour : snap.child('002_o_opening').val(),
-				closingHour : snap.child('003_o_closing').val(),
-				working : snap.child('001_o_status').val()
-			})
+			if(isTomorrow){
+				this.setState({
+					tomorrowOpeningHour : snap.child('002_o_opening').val(),
+					tomorrowClosingHour : snap.child('003_o_closing').val(),
+					tomorrowWorking : snap.child('001_o_status').val()
+				})
+			}
+			else{
+				this.setState({
+					openingHour : snap.child('002_o_opening').val(),
+					closingHour : snap.child('003_o_closing').val(),
+					working : snap.child('001_o_status').val()
+				})
+			}
 		});
 		
 	}
@@ -184,9 +140,50 @@ export default class HomeScreen extends Component {
 		})
 	}
 
+	//Function to add user to waitlist
+	addToWaitList = () => {
+		let user = firebase.auth().currentUser;
+		if (user == null){
+			// Works on both Android and iOS
+			Alert.alert(
+				//Alert
+				'User not logged in',
+				//Alert message
+				'You must sign in to use the waitlist feature',
+				[
+					{
+						text: 'Sign in',
+						onPress: () => this.props.navigation.navigate('Account')
+					},
+					{
+						text: 'Cancel',
+						onPress: () => console.log('Cancel Pressed'),
+						style: 'cancel',
+					},
+				],
+				{cancelable: false},
+			);
+		}
+		else{
+			firebaseDatabase.ref('waitList').push({uid : user.uid, name : user.displayName, email : user.email})
+		}
+	}
+
+	//Function to remove user from waitlist
+	removeFromWaitList = () => {
+		var parentPushRef = uid_to_pushRef[firebase.auth().currentUser.uid]
+		console.log('The push id is '+parentPushRef)
+	
+		//Remove this child from the waitlist
+		firebaseDatabase.ref('waitList/'+parentPushRef).remove().then(
+			() => console.log('Successfully removed ' + firebase.auth().currentUser.uid+ ' from waitlist')
+		)
+	}
+
     	didFocusSubscription() {
 	    this.props.navigation.addListener('didFocus', () => {
-			this.listenForHours(this.business_hoursRef)
+			this.listenForHours(this.business_hoursRef, false)
+			this.listenForHours(this.business_hoursRefTomorrow, true)
 			this.listenForWaitlist(this.waitListRef)
 		})
 	}
@@ -194,6 +191,7 @@ export default class HomeScreen extends Component {
     	didBlurSubscription(){
 	    this.props.navigation.addListener('didBlur', () => { 
 		this.business_hoursRef.off()
+		this.business_hoursRefTomorrow.off()
 		this.waitListRef.off()
 	})
 	}
@@ -207,6 +205,7 @@ export default class HomeScreen extends Component {
 
 	componentWillUnmount(){
 		this.business_hoursRef.off()
+		this.business_hoursRefTomorrow.off()
 		this.waitListRef.off()
 	}
 
@@ -233,14 +232,41 @@ export default class HomeScreen extends Component {
 	}
 	
     render(){
+		//Determine whether working next day or not
+		var workingTomorrow = this.state.tomorrowWorking == 'OFF' ? <Text style = {Homestyles.tomorrowStatus}>Tomorrow we are closed</Text> :
+		<Text style = {Homestyles.tomorrowStatus}>Tomorrow: {this.state.tomorrowOpeningHour} to {this.state.tomorrowClosingHour}</Text> 
+
+		//Two layouts for switching b/t working and non working layouts
+		const workingLayout = () => {
+			var waitlistButton = this.state.joinedWaitList ? <Button color = 'red' title = 'Leave Waitlist' onPress = {() => removeFromWaitList()}/> : 
+														<Button color = 'orange' title = 'Join waitlist' onPress = {() => addToWaitList()}/>
+
+			return(
+				<View style = {Homestyles.statusBox}>
+					<Text style={{ color: 'white', justifyContent: 'center', fontSize: 30,}}>Where's Wass?</Text>
+					<Text style = {{color: 'orange', justifyContent: 'center', fontSize : 25}}> Waitlist: {this.state.queueLength} clients</Text>
+					{waitlistButton}
+					<Text style = {Homestyles.statusText}>{this.state.openingHour}</Text>
+					<Text style = {Homestyles.statusText}>to</Text>
+					<Text style = {Homestyles.statusText}>{this.state.closingHour}</Text>
+					{workingTomorrow}
+				</View>
+			)
+		}
+
+		const notWorkingLayout = () => {
+			return(
+				<View style ={Homestyles.statusBox}>
+					<Text style={{ color: 'white', justifyContent: 'center', fontSize: 30,}}>Where's Wass?</Text>
+					<Text style = {{color:'white', fontSize:35, alignSelf : 'center'}}>Off</Text>
+					{workingTomorrow}
+				</View>
+			)
+		}
 		//Render a different layout based on working status
 		//if ON render the workingLayout with appropriate startTime and endTime
 		//else render the nonworkingLayout
-		(this.state.working === 'ON') ? status = workingLayout({startTime:this.state.openingHour,
-																endTime:this.state.closingHour, 
-																navigation:this.props.navigation, 
-																queueLength: this.state.queueLength,
-																joinedWaitList : this.state.joinedWaitList}) : status = notWorkingLayout()
+		(this.state.working === 'ON') ? status = workingLayout() : status = notWorkingLayout()
 
 		return(
 			<ImageBackground source={require('../assets/barberbackground.jpg')} 
@@ -266,6 +292,10 @@ const Homestyles = StyleSheet.create({
 	statusText: {
 		color : 'white',
 		fontSize : 20
+	},
+	tomorrowStatus: {
+		color : 'white',
+		fontSize: 15,
 	}
 })
 

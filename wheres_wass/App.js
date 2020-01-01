@@ -9,12 +9,9 @@ import { StyleSheet,
 import { createAppContainer } from 'react-navigation';
 import {  createDrawerNavigator, DrawerItems  } from 'react-navigation-drawer';
 import { createStackNavigator  } from 'react-navigation-stack';
-import styles from './styles/Styles';
 import HomeScreen from './screens/HomeScreen.component';
 import WeeklyScheduleScreen from './screens/WeeklyScheduleScreen.component';
 import InformationScreen from './screens/InformationScreen.component';
-import QueueScreen from './screens/QueueScreen.component';
-import AgendaScreen from './screens/MonthlyScheduleScreen.component2';
 import LoginScreen from './screens/LoginScreen.component';
 import AccountScreen from './screens/AccountScreen.component';
 import CreateAccountScreen from './screens/CreateAccount.component';
@@ -62,14 +59,7 @@ const InfoNavigator = createStackNavigator(
     }
 )
 
-const QueueNavigator = createStackNavigator(
-    {
-	Queue: QueueScreen
-    },
-    {
-	defaultNavigationOptions: headerConfigs
-    }
-)
+
 const AccountNavigator = createStackNavigator(
     {
         Account: {
@@ -101,7 +91,6 @@ const DrawerNav = createDrawerNavigator({
   Home: HomeNavigator,
   'Weekly Schedule': WeeklyNavigator,
   'About Us': InfoNavigator,
-  Queue: QueueNavigator,
   Account : AccountNavigator
 },
 {
@@ -115,6 +104,7 @@ const DrawerNav = createDrawerNavigator({
 }
 
 )
+
 
 const AppContainer = createAppContainer(DrawerNav);
 

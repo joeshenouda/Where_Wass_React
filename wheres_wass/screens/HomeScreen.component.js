@@ -238,8 +238,8 @@ export default class HomeScreen extends Component {
 
 		//Two layouts for switching b/t working and non working layouts
 		const workingLayout = () => {
-			var waitlistButton = this.state.joinedWaitList ? <Button color = 'red' title = 'Leave Waitlist' onPress = {() => removeFromWaitList()}/> : 
-														<Button color = 'orange' title = 'Join waitlist' onPress = {() => addToWaitList()}/>
+			var waitlistButton = this.state.joinedWaitList ? <Button color = 'red' title = 'Leave Waitlist' onPress = {() => this.removeFromWaitList()}/> : 
+														<Button color = 'orange' title = 'Join waitlist' onPress = {() => this.addToWaitList()}/>
 
 			return(
 				<View style = {Homestyles.statusBox}>

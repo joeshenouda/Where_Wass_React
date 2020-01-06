@@ -17,21 +17,13 @@ class AdminPortal extends Component{
 
 
     //Setting the header for navigation
-    static navigationOptions = ({ navigation }) =>  {
-		const headerObj = {
-			title: "Where's Wass",
-			
-			headerLeft: () => (
-				<FontAwesome.Button name="home" onPress =  {() => navigation.navigate("Home")} backgroundColor = 'black'/>
-			),
-
-			headerRight: () => (
-				<Button title = 'Waitlist' onPress = {() => navigation.navigate('Waitlist')} color = 'orange'/>
-			)
-        }
-
-        return headerObj;
-    }
+    static navigationOptions =   {
+		tabBarLabel : 'Hours',
+		tabBarIcon : () => {
+            return <FontAwesome name="calendar" size={25} style = {{color:'black'}}/>
+        }     
+	}
+	
     componentDidMount(){
 	console.log('componentDidMount called for Admin')
     }

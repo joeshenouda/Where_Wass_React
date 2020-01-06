@@ -90,7 +90,7 @@ export default class HomeScreen extends Component {
 				}))
 			}
 			else{
-				if(!this.state.clientsInWait.includes(snap.val().uid)){
+				if(!this.state.clientsInWait.includes(snap.val().uid) || snap.val().uid == null){
 					this.setState(prevState => ({
 						queueLength : prevState.queueLength+1,
 						clientsInWait : prevState.clientsInWait.concat(snap.val().uid),
@@ -193,6 +193,12 @@ export default class HomeScreen extends Component {
 		this.business_hoursRef.off()
 		this.business_hoursRefTomorrow.off()
 		this.waitListRef.off()
+		//Reset everything
+		this.setState({
+			clientsInWait : [],
+			queueLength : 0,
+			joinedWaitList : false
+		})
 	})
 	}
 

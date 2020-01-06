@@ -7,7 +7,7 @@ An implementation of the the Where's Wass app in React Native
 - Bigger text - Thomas
 - Button UI edit- Thomas
 #### Weekly Scheduler
-- Add date to each day (MM/DD) - Joseph 
+-~~Add date to each day (MM/DD) - Joseph~~
 #### About Us:
 - Make website link - Thomas
 #### Account

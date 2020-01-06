@@ -249,11 +249,11 @@ export default class HomeScreen extends Component {
 
 			return(
 				<View style = {Homestyles.statusBox}>
-					<Text style={{ color: 'white', justifyContent: 'center', fontSize: 30,}}>Where's Wass?</Text>
+					<Text style={{ color: 'white', justifyContent: 'center', fontSize: 35,}}>Where's Wass?</Text>
 					<Text style = {{color: 'orange', justifyContent: 'center', fontSize : 25}}> Waitlist: {this.state.queueLength} clients</Text>
 					{waitlistButton}
 					<Text style = {Homestyles.statusText}>{this.state.openingHour}</Text>
-					<Text style = {Homestyles.statusText}>to</Text>
+					<Text style = {{fontSize:20, color: 'gray'}}>to</Text>
 					<Text style = {Homestyles.statusText}>{this.state.closingHour}</Text>
 					{workingTomorrow}
 				</View>
@@ -263,7 +263,7 @@ export default class HomeScreen extends Component {
 		const notWorkingLayout = () => {
 			return(
 				<View style ={Homestyles.statusBox}>
-					<Text style={{ color: 'white', justifyContent: 'center', fontSize: 30,}}>Where's Wass?</Text>
+					<Text style={{ color: 'white', justifyContent: 'center', fontSize: 50,}}>Where's Wass?</Text>
 					<Text style = {{color:'white', fontSize:35, alignSelf : 'center'}}>Off</Text>
 					{workingTomorrow}
 				</View>
@@ -278,7 +278,7 @@ export default class HomeScreen extends Component {
 			<ImageBackground source={require('../assets/barberbackground.jpg')} 
 			style={{alignItems: 'center', width: '100%', height: '100%'}}>
 					<Image source={require('../assets/logo.png')}
-					style={{width: '45%', height: '45%', flex: 0.7, bottom : '-10%'}}></Image>
+					style={{width: '45%', height: '45%', flex: 1, bottom : '-10%'}}></Image>
 					{status}				
 			</ImageBackground>
 		);}
@@ -286,7 +286,7 @@ export default class HomeScreen extends Component {
 
 const Homestyles = StyleSheet.create({
 	statusBox: {
-		flex : 0.5,
+		flex : 1,
 		justifyContent : 'space-between',
 		alignItems : 'center',
 		backgroundColor : 'black',
@@ -297,7 +297,7 @@ const Homestyles = StyleSheet.create({
 	},
 	statusText: {
 		color : 'white',
-		fontSize : 20
+		fontSize : 30
 	},
 	tomorrowStatus: {
 		color : 'white',

@@ -7,10 +7,16 @@ const scheduleStyles = StyleSheet.create({
     },
     
     textStyle: {
-    fontSize: 18,
+    fontSize: 25,
     color: 'white',
     fontFamily: 'serif',
     textAlign: 'center'
+    },
+    dateStyle :{
+        fontSize : 20,
+        color : 'gray',
+        fontFamily : 'serif',
+        textAlign : 'center'
     }
 }
 );

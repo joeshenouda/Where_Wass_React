@@ -13,7 +13,6 @@ var box_height = height / box_count;
 
 
 firebaseDatabase = firebase.database();
-let daysOfWeek  =['Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday', 'Sunday']
 
 
 

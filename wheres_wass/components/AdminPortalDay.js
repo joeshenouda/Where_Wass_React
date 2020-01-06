@@ -23,7 +23,8 @@ class AdminPortalDay extends Component{
       working : true,
       mode: 'time',
       show: false,
-      editingStart : true
+      editingStart : true,
+      date : ''
     }
     this.hoursRef = firebaseDatabase.ref('business_hours/'+this.props.day)
   }
@@ -128,11 +129,35 @@ class AdminPortalDay extends Component{
 			})
     });
   }
+
+  setDate(){
+	  let today = new Date()
+	  let dayOfWeek = today.getDay()
+	  let daysOfWeek  =['Sunday','Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday']
+
+	  if(daysOfWeek[dayOfWeek] == this.props.day){
+
+		  this.setState({
+			  date : (today.getMonth()+1)+'/'+(today.getDate())
+		  })
+	  }
+	  else{
+		  let numPropDayOfWeek = daysOfWeek.indexOf(this.props.day)
+		  let dayOffSet = ((numPropDayOfWeek-dayOfWeek) < 0) ? numPropDayOfWeek-dayOfWeek+7 : numPropDayOfWeek-dayOfWeek
+		  today.setDate(today.getDate()+dayOffSet)
+
+		  this.setState({
+			  date : (today.getMonth()+1)+'/'+today.getDate()
+		  })
+	  }
+
+  }
     
   componentDidMount(){
     this.hoursRef.off()
     console.log('componentDidMount for AdminPortalDay was called')
     this.listenForHours(this.hoursRef)
+    this.setDate()
   }
 
   componentWillUnmount(){
@@ -143,7 +168,7 @@ class AdminPortalDay extends Component{
   render(){
     return (
           <View style={styles.rect}>
-            <Text style={styles.dayOfWeek}>{this.props.day}</Text>
+            <Text style={styles.dayOfWeek}>{this.props.day} {this.state.date}</Text>
             <CheckBox label = 'Working' checked= {this.state.working} onChange = {(checked) => this.updateWorkingStatus(checked)}/>
             <View>
             <View style = {{flex : 1, flexDirection : 'row', marginHorizontal : 5}}>

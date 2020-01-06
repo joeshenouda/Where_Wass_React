@@ -21,7 +21,8 @@ class WeeklyScheduleDay extends Component{
 	this.state = {
 	    endTime : 'Loading...',
 	    startTime : 'Loading...',
-	    working : true
+		working : true,
+		date : ''
 	}
 	this.hoursRef = firebaseDatabase.ref('business_hours/'+this.props.day)
     }
@@ -46,8 +47,32 @@ class WeeklyScheduleDay extends Component{
     });
   }
 
+  setDate(){
+	  let today = new Date()
+	  let dayOfWeek = today.getDay()
+	  let daysOfWeek  =['Sunday','Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday']
+
+	  if(daysOfWeek[dayOfWeek] == this.props.day){
+
+		  this.setState({
+			  date : (today.getMonth()+1)+'/'+(today.getDate())+'/'+today.getFullYear()
+		  })
+	  }
+	  else{
+		  let numPropDayOfWeek = daysOfWeek.indexOf(this.props.day)
+		  let dayOffSet = ((numPropDayOfWeek-dayOfWeek) < 0) ? numPropDayOfWeek-dayOfWeek+7 : numPropDayOfWeek-dayOfWeek
+		  today.setDate(today.getDate()+dayOffSet)
+
+		  this.setState({
+			  date : (today.getMonth()+1)+'/'+today.getDate()+'/'+today.getFullYear()
+		  })
+	  }
+
+  }
+
   componentDidMount(){
 	this.listenForHours(this.hoursRef)
+	this.setDate()
   }
 
   //When the prop is updated depending on whether our components focuses or blurs we detatch and reattatch the listener
@@ -70,7 +95,8 @@ class WeeklyScheduleDay extends Component{
 	    return(
 		<View style={[styles.box]}>				
 			<Text style= {scheduleStyles.textStyle}>{this.props.day}</Text>
-			<Text style= {scheduleStyles.textStyle}>{this.state.startTime} to {this.state.endTime}</Text>
+			<Text style= {scheduleStyles.dateStyle}>{this.state.date}</Text>
+			<Text style= {scheduleStyles.dateStyle}>{this.state.startTime} to {this.state.endTime}</Text>
 		</View>
 	    )
 	}
@@ -78,7 +104,8 @@ class WeeklyScheduleDay extends Component{
 	    return(
 		<View style={[styles.box]}>				
 			<Text style= {scheduleStyles.textStyle}>{this.props.day}</Text>
-			<Text style= {scheduleStyles.textStyle}>OFF</Text>
+			<Text style= {scheduleStyles.dateStyle}>{this.state.date}</Text>
+			<Text style= {scheduleStyles.dateStyle}>OFF</Text>
 		</View>
 	    )
 	  }

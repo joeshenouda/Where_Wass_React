@@ -263,7 +263,7 @@ export default class HomeScreen extends Component {
 		const notWorkingLayout = () => {
 			return(
 				<View style ={Homestyles.statusBox}>
-					<Text style={{ color: 'white', justifyContent: 'center', fontSize: 50,}}>Where's Wass?</Text>
+					<Text style={{ color: 'white', justifyContent: 'center', fontSize: 35,}}>Where's Wass?</Text>
 					<Text style = {{color:'white', fontSize:35, alignSelf : 'center'}}>Off</Text>
 					{workingTomorrow}
 				</View>

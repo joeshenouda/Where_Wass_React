@@ -14,7 +14,6 @@ import { FontAwesome } from '@expo/vector-icons';
 import HomeScreen from './screens/HomeScreen.component';
 import WeeklyScheduleScreen from './screens/WeeklyScheduleScreen.component';
 import InformationScreen from './screens/InformationScreen.component';
-import LoginScreen from './screens/LoginScreen.component';
 import AccountScreen from './screens/AccountScreen.component';
 import CreateAccountScreen from './screens/CreateAccount.component';
 import AdminPortalScreen from './screens/Admin.component';
@@ -122,9 +121,6 @@ const AccountNavigator = createStackNavigator(
     {
         Account: {
             screen : AccountScreen
-        },
-        Login: {
-            screen : LoginScreen
         },
         CreateAccount: {
             screen : CreateAccountScreen

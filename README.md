@@ -4,16 +4,12 @@ An implementation of the the Where's Wass app in React Native
 
 ### TODO
 #### Home Page
-- Bigger text - Thomas
-- Button UI edit- Thomas
 #### Weekly Scheduler
 -~~Add date to each day (MM/DD) - Joseph~~
 #### About Us:
 - Make website link - Thomas
 #### Account
 - Facebook buggy - Joseph
-- Create account facelift - Thomas
-- front end UI stuff make it pretty - Thomas
 - Display name for signed in users - Joseph
 - Reset password - Joseph
 #### Admin WaitList

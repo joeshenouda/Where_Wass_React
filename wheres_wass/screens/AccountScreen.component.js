@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, Alert, Image } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, Alert, Image, KeyboardAvoidingView } from 'react-native';
 import firebase,{facebookAppID} from '../config';
 import * as Facebook from 'expo-facebook';
 import { FontAwesome } from '@expo/vector-icons';
@@ -44,19 +44,6 @@ class Account extends Component{
 	async loginWithFacebook() {
 		try{
 			await Facebook.initializeAsync(facebookAppID).then(console.log("Initialized Async")).catch((error) => {
-				// Alert.alert(
-				// 	'Facebook Login',
-				// 	'Login to facebook failed'+error.message,
-				// 	[
-				// 	  {text: 'Try Again', onPress: () => console.log('Ask me later pressed')},
-				// 	  {
-				// 		text: 'Cancel',
-				// 		onPress: () => console.log('Cancel Pressed'),
-				// 		style: 'cancel',
-				// 	  },
-				// 	],
-				// 	{cancelable: false},
-				//   );
 				console.log(error)
 			})
 
@@ -104,7 +91,7 @@ class Account extends Component{
 		}
 	}
 		catch({message}){
-			console.log('Facebook login error'+message)
+			console.log('Facebook login error '+message)
 		}
 	}
 	didFocusSubscription() {
@@ -163,36 +150,23 @@ class Account extends Component{
 		}
 		else{
 			return(
-			<View style = {accountStyles.container}>
-					<Image source={require('../assets/logo.png')}
-						style={{width: '50%', height: '40%'}}></Image>
+			<KeyboardAvoidingView behavior='padding' style={{flex:1, justifyContent:'space-between'}}>
+				<View style = {accountStyles.container}>
+					<Image source={require('../assets/logo.png')} style = {{width:'50%', height:'50%', alignSelf:'center', bottom:'-10%'}}></Image>
 					<Text style = {accountStyles.textStyle}>Welcome to Where's Wass!</Text>
-					<View style = {accountStyles.buttons}>
-					<TextInput style = {style.textinput} autoCapitalize = 'none' placeholder = 'Enter Email' onChangeText = { (text) => this.setState({email : text}) } />	
-					<TextInput style = {style.textinput} autoCapitalize = 'none' placeholder = 'Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({password : text})} />
+					<TextInput style = {accountStyles.textinput} autoCapitalize = 'none' placeholder = 'Enter Email' onChangeText = { (text) => this.setState({email : text}) } />	
+					<TextInput style = {accountStyles.textinput} autoCapitalize = 'none' placeholder = 'Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({password : text})} />
+					<View style={{margin:10}}>
+						<Button color ='orange' title = 'Log in with email' onPress = {() => this.loginWithEmail()}/>
+						<SocialIcon title= 'Sign in with Facebook' button type="facebook" onPress = {() => this.loginWithFacebook()}/>
+						<Button color ='orange' title = 'Create account with Email' onPress = {() => this.props.navigation.navigate('CreateAccount')} />
 					</View>
-					<View style = {accountStyles.buttons}>
-					<Button color ='orange' title = 'Log in with email' onPress = {() => this.loginWithEmail()}/>
-					<SocialIcon title= 'Sign in with Facebook' button type="facebook" onPress = {() => this.loginWithFacebook()}/>
-					<Button color ='orange' title = 'Create account with Email' onPress = {() => this.props.navigation.navigate('CreateAccount')} />
-					</View>
-				
-			</View>
+				</View>
+			</KeyboardAvoidingView>
 			)
 		}
     }
 }
 
-
-const style = StyleSheet.create({
-    textinput : {
-	borderColor : 'orange',
-	borderWidth : 2,
-	padding : 10,
-	width : 300,
-	color : 'white'
-	
-    }
-})
 
 export default Account;

@@ -47,10 +47,8 @@ class InStoreWaitlist extends Component{
     render(){
         console.log('We are re-rendering InStoreWaitlist')
         return(
-                <View style= {inStoreStyles.container}>
-                    <ImageBackground source={require('../assets/background.jpg')}
-            style={{alignItems: 'center', width: '100%', height: '100%'}}>			
-			                <Text style = {inStoreStyles.mainHeader}>Welcome to Wadie's Salon</Text>
+            <View style= {inStoreStyles.container}>			
+			    <Text style = {inStoreStyles.mainHeader}>Welcome to Wadie's Salon</Text>
                 <DialogInput isDialogVisible={this.state.isDialogVisible}
                     title={"Add to Waitlist"}
                     message={"Please enter your name to be added to the waitlist"}
@@ -63,7 +61,6 @@ class InStoreWaitlist extends Component{
                 <TouchableOpacity onPress={() => this.addClient()} style={styles.fab}>
                     <Text style={styles.fabIcon}>+</Text>
                 </TouchableOpacity>
-                </ImageBackground>
             </View>
 
            

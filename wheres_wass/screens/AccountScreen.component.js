@@ -45,59 +45,69 @@ class Account extends Component{
     }
 
 	async loginWithFacebook() {
-		await Facebook.initializeAsync(facebookAppID).then(console.log("Initialized Async")).catch((error) => {
-			Alert.alert(
-				'Facebook Login',
-				'Login to facebook failed'+error.message,
-				[
-				  {text: 'Try Again', onPress: () => console.log('Ask me later pressed')},
-				  {
-					text: 'Cancel',
-					onPress: () => console.log('Cancel Pressed'),
-					style: 'cancel',
-				  },
-				],
-				{cancelable: false},
-			  );
-		})
-	
-		const { type, token, expires, permissions, declinedPermissions } = await Facebook.logInWithReadPermissionsAsync(facebookAppID,
-			{permissions: ['public_profile'] }
-		);
-	
-		if (type === 'success'){
-			//Prints out permissions
-			console.log('Granted permissions are  '+permissions)
-			console.log('Declined permissions are '+declinedPermissions)
+		try{
+			await Facebook.initializeAsync(facebookAppID).then(console.log("Initialized Async")).catch((error) => {
+				// Alert.alert(
+				// 	'Facebook Login',
+				// 	'Login to facebook failed'+error.message,
+				// 	[
+				// 	  {text: 'Try Again', onPress: () => console.log('Ask me later pressed')},
+				// 	  {
+				// 		text: 'Cancel',
+				// 		onPress: () => console.log('Cancel Pressed'),
+				// 		style: 'cancel',
+				// 	  },
+				// 	],
+				// 	{cancelable: false},
+				//   );
+				console.log(error)
+			})
 
-			//Build firebase credentials with the Facebook access token
-			const credential = firebase.auth.FacebookAuthProvider.credential(token);
-	
-			//Sign in with credential from the facebook user
-			firebase.auth().signInWithCredential(credential).then(
-				Alert.alert(
-					'Facebook Login',
-					'Login Successful!',
-					[
-					  {text: 'Go to Home', onPress: () => this.props.navigation.navigate('Home')},
-					],
-					{cancelable: false},
-				  )
-			).catch((error) =>{
-				Alert.alert(
-					'Facebook Login',
-					'Login to firebase failed'+error.message,
-					[
-					  {text: 'Try Again', onPress: () => console.log('try again pressed')},
-					  {
-						text: 'Cancel',
-						onPress: () => console.log('Cancel Pressed'),
-						style: 'cancel',
-					  },
-					],
-					{cancelable: false},
-				  );
-			});
+		
+			const { type, token, expires, permissions, declinedPermissions } = await Facebook.logInWithReadPermissionsAsync(facebookAppID,
+				{permissions: ['public_profile'] }
+			);
+		
+			if (type === 'success'){
+				//Prints out permissions
+				console.log('Granted permissions are  '+permissions)
+				console.log('Declined permissions are '+declinedPermissions)
+
+				//Build firebase credentials with the Facebook access token
+				const credential = firebase.auth.FacebookAuthProvider.credential(token);
+		
+				//Sign in with credential from the facebook user
+				firebase.auth().signInWithCredential(credential).then(
+					Alert.alert(
+						'Facebook Login',
+						'Login Successful!',
+						[
+						{text: 'Go to Home', onPress: () => this.props.navigation.navigate('Home')},
+						],
+						{cancelable: false},
+					)
+				).catch((error) =>{
+					Alert.alert(
+						'Facebook Login',
+						'Login to firebase failed'+error.message,
+						[
+						{text: 'Try Again', onPress: () => console.log('try again pressed')},
+						{
+							text: 'Cancel',
+							onPress: () => console.log('Cancel Pressed'),
+							style: 'cancel',
+						},
+						],
+						{cancelable: false},
+					);
+				});
+			}
+			else{
+				console.log('Cancelled facebook')
+		}
+	}
+		catch({message}){
+			console.log('Facebook login error'+message)
 		}
 	}
     
@@ -116,11 +126,13 @@ class Account extends Component{
 					<Image source={require('../assets/logo.png')}
 						style={{width: '50%', height: '40%', justifyContent: 'flex-start'}}></Image>
 					<Text style={{fontSize:30, color : 'white'}}>Hello, Signed In as:</Text>
-					<View style = {{borderColor : 'orange', borderWidth : 4, margin:10}}>
-						<Text style={{borderColor:'orange', fontWeight:'bold', fontSize : 30, color:'white'}}>{this.state.user.displayName}</Text>	
+					<View>
+						<Text style={{color: 'white'}}>Your Name:</Text>
+						<Text style={{ fontWeight:'bold', fontSize : 30, color:'white'}}>{this.state.user.displayName}</Text>	
 					</View>
-					<View style = {{borderColor : 'orange', borderWidth : 4, margin:10}}>
-						<Text style={{borderColor:'orange', fontWeight:'bold',fontSize : 25, color:'white'}}>{this.state.user.email}</Text> 
+					<View>
+						<Text style={{color: 'white'}}>Your Email:</Text>
+						<Text style={{ fontWeight:'bold',fontSize : 25, color:'white'}}>{this.state.user.email}</Text> 
 					</View>
 					<Button title = 'Sign out'  color='orange'  onPress = {() => firebase.auth().signOut().then( () => this.props.navigation.navigate('Home'))}/>
 

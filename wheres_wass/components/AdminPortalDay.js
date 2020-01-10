@@ -2,11 +2,8 @@ import React, { Component  } from 'react';
 import { StyleSheet,
          Text, 
          View,
-         ScrollView,
-         TextInput,
+         Switch
          } from 'react-native';
-
-import CheckBox from 'react-native-checkbox';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import firebase from '../config';
 
@@ -30,9 +27,10 @@ class AdminPortalDay extends Component{
   }
 
   updateWorkingStatus(prevWorking){
-    this.setState({
-      working : !prevWorking
-    })
+    this.setState(prevState => ({
+      working : !prevState.working
+    }
+    ))
 
     !prevWorking ? this.hoursRef.child('001_o_status').set('ON') :  this.hoursRef.child('001_o_status').set('OFF')
   }
@@ -61,23 +59,21 @@ class AdminPortalDay extends Component{
 
     const reconstructedTime = hour+':'+minute+' '+AMorPM;
 
-    console.log(reconstructedTime)
-
     //Define which time node we are updating
     let timeToUpdate = this.state.editingStart ? '002_o_opening' : '003_o_closing';
     
     //Setting the state according to which time was updated (start or end)
     if(timeToUpdate){ 
-	this.setState({
-	  show : false,
-	  startTime : reconstructedTime
-	})
-    }
-    else{
-	this.setState({
-	  show : false,
-	  endTime : reconstructedTime
-	})
+      this.setState({
+        show : false,
+        startTime : reconstructedTime
+      })
+        }
+        else{
+      this.setState({
+        show : false,
+        endTime : reconstructedTime
+      })
  
     }
 
@@ -155,13 +151,11 @@ class AdminPortalDay extends Component{
     
   componentDidMount(){
     this.hoursRef.off()
-    console.log('componentDidMount for AdminPortalDay was called')
     this.listenForHours(this.hoursRef)
     this.setDate()
   }
 
   componentWillUnmount(){
-    console.log('componentWillUnmount for AdminPortalDay was called')
     this.hoursRef.off()
   }
 
@@ -169,7 +163,10 @@ class AdminPortalDay extends Component{
     return (
           <View style={styles.rect}>
             <Text style={styles.dayOfWeek}>{this.props.day} {this.state.date}</Text>
-            <CheckBox label = 'Working' checked= {this.state.working} onChange = {(checked) => this.updateWorkingStatus(checked)}/>
+            <View style={{flexDirection:'row'}}>
+              <Switch trackColor = {{false :'black', true: 'orange'}} thumbColor = 'black' value= {this.state.working} onValueChange = {() => this.updateWorkingStatus(this.state.working)}/>
+              <Text style ={{fontSize : 15}}>Working</Text>
+            </View>
             <View>
             <View style = {{flex : 1, flexDirection : 'row', marginHorizontal : 5}}>
               <Text style={styles.startTime}>Start Time:</Text>

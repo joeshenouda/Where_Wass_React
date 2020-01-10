@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
+import { Assets } from 'react-navigation-stack';
 
-const aboutUsStyles = StyleSheet.create({
+const inStoreStyles = StyleSheet.create({
     container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'black',
     },
 
     mainHeader: {
     alignContent: 'center',
     fontSize: 30,
-    paddingBottom: 20,
     fontFamily: 'serif',
-    color: 'red'
+    color: 'orange'
     },
 
     headerStyle: {
@@ -35,4 +34,4 @@ const aboutUsStyles = StyleSheet.create({
 }
 );
 
-export default(aboutUsStyles)
+export default(inStoreStyles)

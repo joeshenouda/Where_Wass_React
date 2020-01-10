@@ -6,15 +6,19 @@ const accountStyles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: 'black',
-    justifyContent: 'center',
-    alignContent: 'center'
+    justifyContent: 'space-between',
+    alignItems: 'center'
     },
     
     textStyle: {
-    fontSize: 18,
+    fontSize: 24,
     color: 'white',
-    fontFamily: 'serif',
+    fontFamily: 'monospace',
     textAlign: 'center'
+    },
+
+    buttons: {
+        justifyContent: 'space-evenly'
     }
 }
 );

@@ -84,7 +84,7 @@ class CreateAccountScreen extends Component {
             <TextInput style = {style.input} autoCapitalize = 'none' placeholder = 'Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({password : text})} />
             <TextInput style = {style.input} autoCapitalize = 'none' placeholder = 'Re-Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({reenteredPS : text})} />
 
-            <Button title = 'Create Account' onPress = {() => this._onPressCreate()}/>
+            <Button color= 'orange' title = 'Create Account' onPress = {() => this._onPressCreate()}/>
         </KeyboardAvoidingView>
     )
     }

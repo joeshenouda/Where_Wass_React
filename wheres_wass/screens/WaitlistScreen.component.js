@@ -14,20 +14,14 @@ import firebase from '../config'
 
 firebaseDatabase = firebase.database();
 
-const waitingClient = (props) => {
-    return(
-        <View>
-            <Text>{props.identifier}</Text>
-            <Text>{props.waitTime}</Text>
-        </View>
-    )
-}
 
 class WaitlistScreen extends Component{
     constructor(props){
         super(props),
         this.state = {
-            arrayOfWaitingClients: []
+            arrayOfWaitingClients: [],
+            isFetching : false,
+            now : new Date()
         }
         this.waitRef = firebaseDatabase.ref('waitList/');
     }
@@ -43,17 +37,23 @@ class WaitlistScreen extends Component{
     Person({client}) {
         
         return (
-            <TouchableOpacity style={{flex : 1, justifyContent:'center', alignItems:'center', padding:20}} 
+            <TouchableOpacity  
             onPress = {() => firebaseDatabase.ref('waitList/'+client.id).remove().then( () => console.log('Successfully removed '+client.id) )}>
-                <Text style = {{fontSize: 25}}>{client.name}</Text>
+                <View style={{flex : 1,flexDirection:'row',justifyContent: 'space-between', padding : 20}}>
+                    <Text style = {{fontSize: 20}}>{client.name}</Text>
+                    <Text style = {{fontSize : 15}}>{Math.round((((new Date() - Date.parse(client.time))%86400000) % 3600000)/60000)}m</Text>
+                </View>
             </TouchableOpacity>
         )
     }
     PersonStatic({client}) {
         
         return (
-            <View style={{flex : 1, justifyContent:'center', alignItems:'center', padding:20}}>
-                <Text style = {{fontSize: 25}}>{client.name}</Text>
+            <View>
+                <View style={{flex : 1,flexDirection:'row',justifyContent: 'space-between', padding : 20}}>
+                    <Text style = {{fontSize: 20, marginHorizontal : 5}}>{client.name}</Text>
+                    <Text style = {{fontSize : 15}}>{Math.round((((new Date() - Date.parse(client.time))%86400000) % 3600000)/60000)}m</Text>
+                </View>
                 <View style = {styles.separator}></View>
             </View>
         )
@@ -77,7 +77,8 @@ class WaitlistScreen extends Component{
                 arrayOfWaitingClients : prevState.arrayOfWaitingClients.concat(
                     {
                         name : identifier,
-                        id : snap.key
+                        id : snap.key,
+                        time : snap.val().time
                     }
                     
                 )
@@ -93,6 +94,7 @@ class WaitlistScreen extends Component{
 
     componentDidMount(){
         console.log('Called componentDidMount for waitlistScreen')
+        setInterval(() => this.setState({now:new Date()}), 60000)
         this.listenForWaitList(this.waitRef)
     }
     componentWillUnmount(){
@@ -107,7 +109,13 @@ class WaitlistScreen extends Component{
                     data={this.state.arrayOfWaitingClients}
                     renderItem = {({item}) => <this.Person client={item}/>}
                     keyExtractor = {item => item.id}
-                    extraData={this.state.arrayOfWaitingClients}
+                    extraData={this.state.arrayOfWaitingClients, this.state.now}
+                    refreshing={this.state.isFetching}
+                    onRefresh= {() => {
+                                        this.setState({isFetching : true})
+                                        this.setState({isFetching:false})
+                                        }
+                                    }
                     />
                 </SafeAreaView>
             )
@@ -119,7 +127,13 @@ class WaitlistScreen extends Component{
                     data={this.state.arrayOfWaitingClients}
                     renderItem = {({item}) => <this.PersonStatic client={item}/>}
                     keyExtractor = {item => item.id}
-                    extraData={this.state.arrayOfWaitingClients}
+                    extraData={this.state.arrayOfWaitingClients, this.state.now}
+                    refreshing = {this.state.isFetching}
+                    onRefresh= {() =>{
+                                         this.setState({isFetching : true})
+                                         this.setState({isFetching:false})
+                                        }
+                                    }
                     />
                 </SafeAreaView>
             )

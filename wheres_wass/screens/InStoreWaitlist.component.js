@@ -7,9 +7,7 @@ import { StyleSheet,
          TouchableOpacity,
          TextInput
          } from 'react-native';
-import { FontAwesome  } from '@expo/vector-icons';
 import firebase from '../config';
-import { FloatingAction } from 'react-native-floating-action';
 import Waitlist from './WaitlistScreen.component';
 import DialogInput from 'react-native-dialog-input';
 
@@ -30,7 +28,7 @@ class InStoreWaitlist extends Component{
     }
 
     submitToWaitlist(nameInput){
-        this.waitlistRef.push({name : nameInput})
+        this.waitlistRef.push({name : nameInput, time: new Date().toString()})
         this.setState({
             isDialogVisible:false
         })

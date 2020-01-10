@@ -5,13 +5,15 @@ import { StyleSheet,
          ScrollView,
          Button,
          TouchableOpacity,
-         TextInput
+         TextInput,
+         ImageBackground
          } from 'react-native';
 import { FontAwesome  } from '@expo/vector-icons';
 import firebase from '../config';
 import { FloatingAction } from 'react-native-floating-action';
 import Waitlist from './WaitlistScreen.component';
 import DialogInput from 'react-native-dialog-input';
+import inStoreStyles from '../styles/inStoreStyles';
 
 firebaseDatabase = firebase.database();
 
@@ -36,7 +38,7 @@ class InStoreWaitlist extends Component{
         })
     }
 
-    addClient() {
+    addClient()  {
         this.setState({
             isDialogVisible : true
         })
@@ -47,7 +49,10 @@ class InStoreWaitlist extends Component{
     render(){
         console.log('We are re-rendering InStoreWaitlist')
         return(
-            <View style={{flex:1}}>
+                <View style= {inStoreStyles.container}>
+                    <ImageBackground source={require('../assets/background.jpg')}
+            style={{alignItems: 'center', width: '100%', height: '100%'}}>			
+			                <Text style = {inStoreStyles.mainHeader}>Welcome to Wadie's Salon</Text>
                 <DialogInput isDialogVisible={this.state.isDialogVisible}
                     title={"Add to Waitlist"}
                     message={"Please enter your name to be added to the waitlist"}
@@ -56,14 +61,15 @@ class InStoreWaitlist extends Component{
                     submitInput = {(inputtext) => this.submitToWaitlist(inputtext)}
                     closeDialog = {() => this.setState({isDialogVisible:false})}>
                 </DialogInput>
-                <Waitlist style = {{flex:3}} removable = {false}/>
+                <Waitlist style = {{flex:3, color: 'white'}} removable = {false}/>
                 <TouchableOpacity onPress={() => this.addClient()} style={styles.fab}>
                     <Text style={styles.fabIcon}>+</Text>
                 </TouchableOpacity>
+                </ImageBackground>
             </View>
+
            
         )
-
     }
 
     
@@ -80,7 +86,7 @@ const styles = StyleSheet.create({
       bottom: 20, 
       backgroundColor: 'black', 
       borderRadius: 30, 
-      elevation: 8 
+      elevation: 8, 
       }, 
       fabIcon: { 
         fontSize: 40, 

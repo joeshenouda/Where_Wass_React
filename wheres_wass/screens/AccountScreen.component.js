@@ -1,9 +1,10 @@
 import React,{ Component } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, Alert  } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, Alert, Image } from 'react-native';
 import firebase,{facebookAppID} from '../config';
 import * as Facebook from 'expo-facebook';
 import { FontAwesome } from '@expo/vector-icons';
 import accountStyles from '../styles/AccountStyles';
+import { SocialIcon } from 'react-native-elements';
 
 class Account extends Component{
     constructor(props){
@@ -111,8 +112,10 @@ class Account extends Component{
     render(){
 		if (this.state.user != null){
 			return(
-				<View style = {{flex:1,justifyContent:'center', alignContent :'center', backgroundColor:'black'}}>
-					<Text style={{fontSize:40, color : 'white'}}>Hello, Signed in as:</Text>
+				<View style = {{flex:1,justifyContent:'space-evenly', alignItems :'center', backgroundColor:'black'}}>
+					<Image source={require('../assets/logo.png')}
+						style={{width: '50%', height: '40%', justifyContent: 'flex-start'}}></Image>
+					<Text style={{fontSize:30, color : 'white'}}>Hello, Signed In as:</Text>
 					<View style = {{borderColor : 'orange', borderWidth : 4, margin:10}}>
 						<Text style={{borderColor:'orange', fontWeight:'bold', fontSize : 30, color:'white'}}>{this.state.user.displayName}</Text>	
 					</View>
@@ -128,15 +131,19 @@ class Account extends Component{
 		else{
 			return(
 			<View style = {accountStyles.container}>
+					<Image source={require('../assets/logo.png')}
+						style={{width: '50%', height: '40%'}}></Image>
+					<Text style = {accountStyles.textStyle}>Welcome to Where's Wass!</Text>
+					<View style = {accountStyles.buttons}>
 					<TextInput style = {style.textinput} autoCapitalize = 'none' placeholder = 'Enter Email' onChangeText = { (text) => this.setState({email : text}) } />	
 					<TextInput style = {style.textinput} autoCapitalize = 'none' placeholder = 'Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({password : text})} />
-					<Button title = 'Log in with email' onPress = {() => this.loginWithEmail()}/>
-
-					<Text> OR </Text>
-					<Button title = 'Login with Facebook' onPress = {() => this.loginWithFacebook()}/>
-					<Text>OR</Text>
-					<Button title = 'Create account with Email' onPress = {() => this.props.navigation.navigate('CreateAccount')} />
-
+					</View>
+					<View style = {accountStyles.buttons}>
+					<Button color ='orange' title = 'Log in with email' onPress = {() => this.loginWithEmail()}/>
+					<SocialIcon title= 'Sign in with Facebook' button type="facebook" onPress = {() => this.loginWithFacebook()}/>
+					<Button color ='orange' title = 'Create account with Email' onPress = {() => this.props.navigation.navigate('CreateAccount')} />
+					</View>
+				
 			</View>
 			)
 		}

@@ -40,8 +40,8 @@ class WaitlistScreen extends Component{
             <TouchableOpacity  
             onPress = {() => firebaseDatabase.ref('waitList/'+client.id).remove().then( () => console.log('Successfully removed '+client.id) )}>
                 <View style={{flex : 1,flexDirection:'row',justifyContent: 'space-between', padding : 20}}>
-                    <Text style = {{fontSize: 20}}>{client.name}</Text>
-                    <Text style = {{fontSize : 15}}>{Math.round((((new Date() - Date.parse(client.time))%86400000) % 3600000)/60000)}m</Text>
+                    <Text style = {{fontSize: 25}}>{client.name}</Text>
+                    <Text style = {{fontSize : 20}}>{Math.round((((new Date() - Date.parse(client.time))%86400000) % 3600000)/60000)}m</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -51,8 +51,8 @@ class WaitlistScreen extends Component{
         return (
             <View>
                 <View style={{flex : 1,flexDirection:'row',justifyContent: 'space-between', padding : 20}}>
-                    <Text style = {{fontSize: 20, marginHorizontal : 5}}>{client.name}</Text>
-                    <Text style = {{fontSize : 15}}>{Math.round((((new Date() - Date.parse(client.time))%86400000) % 3600000)/60000)}m</Text>
+                    <Text style = {{fontSize: 25, marginHorizontal : 5}}>{client.name}</Text>
+                    <Text style = {{fontSize : 20}}>{Math.round((((new Date() - Date.parse(client.time))%86400000) % 3600000)/60000)}m</Text>
                 </View>
                 <View style = {styles.separator}></View>
             </View>

@@ -5,7 +5,6 @@ import { Assets } from 'react-navigation-stack';
 const inStoreStyles = StyleSheet.create({
     container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'space-between',
     },
 

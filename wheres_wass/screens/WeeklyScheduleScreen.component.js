@@ -1,5 +1,5 @@
 import React, { Component  } from 'react';
-import { StyleSheet, Text, View, Button, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, View, Dimensions, ScrollView } from 'react-native';
 import scheduleStyles from '../styles/ScheduleStyles';
 import { FontAwesome } from '@expo/vector-icons';
 import firebase from '../config';
@@ -38,25 +38,23 @@ export default class WeeklyScheduleScreen extends Component {
   };
 
   //Focus and blur subscriptions to change props in WeeklyScheduleDay components
-  didFocusSubscription() {
+	didFocusSubscription() {
 	this.props.navigation.addListener('didFocus', () => {
-		this.setState({
-			focusing : true,
-			blurring :false
+			this.setState({
+				focusing : true,
+				blurring :false
+			})
 		})
-		console.log('didFocues called for weeklySchedule')
-})
-}
+	}
 
 	didBlurSubscription(){
 	this.props.navigation.addListener('didBlur', () => { 
-		this.setState({
-			focusing : false,
-			blurring : true
+			this.setState({
+				focusing : false,
+				blurring : true
+			})
 		})
-	console.log('didBlur called for weeklySchedule')
-})
-}
+	}
 
 	componentDidMount(){
 		this.didFocusSubscription()

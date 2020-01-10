@@ -172,9 +172,7 @@ export default class HomeScreen extends Component {
 		}
 		else{
 			let dateNow = new Date()
-			let enterMinute = dateNow.getMinutes()
-			let enterTime = ((dateNow.getHours() + 1) >= 12) ? (dateNow.getHours()+1) % 12 + ':' + enterMinute + 'PM' : (dateNow.getHours() + 1) + ':' + enterMinute + 'AM'
-			firebaseDatabase.ref('waitList').push({uid : user.uid, name : user.displayName, email : user.email, time : enterTime})
+			firebaseDatabase.ref('waitList').push({uid : user.uid, name : user.displayName, email : user.email, time : dateNow.toString()})
 		}
 	}
 

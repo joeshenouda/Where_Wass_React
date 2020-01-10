@@ -1,5 +1,5 @@
 import React, { Component  } from 'react';
-import { StyleSheet, Text, View, Button, ImageBackground, Image, Alert} from 'react-native';
+import { StyleSheet, Text, View, Button, ImageBackground, Image, Alert, TouchableOpacity} from 'react-native';
 import styles from '../styles/Styles';
 import { FontAwesome  } from '@expo/vector-icons';
 import firebase from '../config';
@@ -130,14 +130,20 @@ export default class HomeScreen extends Component {
 	}
 	//Listen for admin will change the header bar by adding a button when the authState changes and is Wass or Joe Shenouda
 	listenForAdmin(){
-		firebase.auth().onAuthStateChanged( (currUser) => {
-			if (currUser != null && (currUser.uid =='wxvpFDGbWlQSVLtWiXepnkShU6D3'|| currUser.uid == 'Fl410iXYnfM19EZODAY4mWKmehW2')){
-				this.props.navigation.setParams({'admin': 'true'})
+		const unsubscribe = firebase.auth().onAuthStateChanged(
+			(currentUser) =>{
+				//Immediateyl unsubscribe the onAuthStateChanged because we override it again in AccountScreen
+				unsubscribe();
+				this.setState({user : currentUser})
+				if (currentUser != null && (currentUser.uid =='wxvpFDGbWlQSVLtWiXepnkShU6D3'|| currentUser.uid == 'Fl410iXYnfM19EZODAY4mWKmehW2')){
+					this.props.navigation.setParams({'admin': 'true'})
+				}
+				else{
+					this.props.navigation.setParams({'admin': 'false'})
+				}
 			}
-			else{
-				this.props.navigation.setParams({'admin': 'false'})
-			}
-		})
+		)
+
 	}
 
 	//Function to add user to waitlist
@@ -165,7 +171,10 @@ export default class HomeScreen extends Component {
 			);
 		}
 		else{
-			firebaseDatabase.ref('waitList').push({uid : user.uid, name : user.displayName, email : user.email})
+			let dateNow = new Date()
+			let enterMinute = dateNow.getMinutes()
+			let enterTime = ((dateNow.getHours() + 1) >= 12) ? (dateNow.getHours()+1) % 12 + ':' + enterMinute + 'PM' : (dateNow.getHours() + 1) + ':' + enterMinute + 'AM'
+			firebaseDatabase.ref('waitList').push({uid : user.uid, name : user.displayName, email : user.email, time : enterTime})
 		}
 	}
 
@@ -185,6 +194,7 @@ export default class HomeScreen extends Component {
 			this.listenForHours(this.business_hoursRef, false)
 			this.listenForHours(this.business_hoursRefTomorrow, true)
 			this.listenForWaitlist(this.waitListRef)
+			this.listenForAdmin()
 		})
 	}
 
@@ -205,8 +215,7 @@ export default class HomeScreen extends Component {
 	//Calls our listenForHours function once before rendering component
 	componentDidMount(){
 	    this.didFocusSubscription()
-	    this.didBlurSubscription()
-		this.listenForAdmin()
+		this.didBlurSubscription()
 	}
 
 	componentWillUnmount(){
@@ -277,8 +286,7 @@ export default class HomeScreen extends Component {
 		return(
 			<ImageBackground source={require('../assets/barberbackground.jpg')} 
 			style={{alignItems: 'center', width: '100%', height: '100%'}}>
-					<Image source={require('../assets/logo.png')}
-					style={{width: '45%', height: '45%', flex: 1, bottom : '-10%'}}></Image>
+					<Image source={require('../assets/logo.png')} style={{width: '45%', height: '45%', flex: 1, bottom : '-10%'}}/>
 					{status}				
 			</ImageBackground>
 		);}

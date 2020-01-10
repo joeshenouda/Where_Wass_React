@@ -11,7 +11,8 @@ class Account extends Component{
 		this.state = {
 			user : firebase.auth().currentUser,
 			email : '',
-			password : ''
+			password : '',
+			unSubFunc : null
 		}
 	}
 	//Setting the header for users to access nav drawer
@@ -27,20 +28,16 @@ class Account extends Component{
 	}
 
 	loginWithEmail(){
-		firebase.auth().signInWithEmailAndPassword(this.state.email,this.state.password).catch((error) => console.log("Failure in signing in with email and password"))
-		.then(
-			() => {
-				Alert.alert(
-					'Email Login',
-					'Login Successful!',
-					[
-					  {text: 'Go to Home', onPress: () => this.props.navigation.navigate('Home')},
-					],
-					{cancelable: false},
-				  )
-			}
-		)
-	
+		firebase.auth().signInWithEmailAndPassword(this.state.email,this.state.password).catch((error) =>{
+			Alert.alert(
+				'Error',
+				error.message,
+				[
+				  {text: 'Try Again', onPress: () => console.log('Ask me later pressed')},
+				],
+				{cancelable: false},
+			  );
+		})
     }
 
 	async loginWithFacebook() {
@@ -73,16 +70,7 @@ class Account extends Component{
 			const credential = firebase.auth.FacebookAuthProvider.credential(token);
 	
 			//Sign in with credential from the facebook user
-			firebase.auth().signInWithCredential(credential).then(
-				Alert.alert(
-					'Facebook Login',
-					'Login Successful!',
-					[
-					  {text: 'Go to Home', onPress: () => this.props.navigation.navigate('Home')},
-					],
-					{cancelable: false},
-				  )
-			).catch((error) =>{
+			firebase.auth().signInWithCredential(credential).catch((error) =>{
 				Alert.alert(
 					'Facebook Login',
 					'Login to firebase failed'+error.message,
@@ -99,13 +87,37 @@ class Account extends Component{
 			});
 		}
 	}
+	didFocusSubscription() {
+	    this.props.navigation.addListener('didFocus', () => {
+			const unsub = firebase.auth().onAuthStateChanged((currentUser) => {
+				//First checks that we are on the Account screen
+				if(this.props.navigation.state.routeName == 'Account'){
+					//Checks if the auth state has changed from null to non-null
+					if(currentUser != null && this.state.user == null){
+						Alert.alert(
+							'Welcome',
+							'Login Successful!',
+							[
+								{text: 'Go to Home', onPress: () => this.props.navigation.navigate('Home')},
+							],
+							{cancelable: true},
+						)
+					}
+					this.setState({user:currentUser, unSubFunc : unsub})
+				}
+			})
+		})
+	}
+
+	didBlurSubscription(){
+		if(this.state.unSubFunc != null){
+			this.state.unSubFunc()
+		}
+	}
     
     componentDidMount(){
-		firebase.auth().onAuthStateChanged(
-			(currentUser) =>{
-				this.setState({user : currentUser})
-			}
-		)
+		this.didFocusSubscription()
+		this.didBlurSubscription()
 	}
 	
     render(){

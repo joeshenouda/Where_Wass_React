@@ -53,7 +53,7 @@ class WaitlistScreen extends Component{
         
         return (
             <View style={{flex : 1, justifyContent:'center', alignItems:'center', padding:20}}>
-                <Text style = {{fontSize: 25}}>{client.name}</Text>
+                <Text style = {{fontSize: 28, color: 'white', fontStyle: 'bold'}}>{client.name}</Text>
                 <View style = {styles.separator}></View>
             </View>
         )

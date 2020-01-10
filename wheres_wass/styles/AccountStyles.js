@@ -6,7 +6,7 @@ const accountStyles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: 'black',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center'
     },
     

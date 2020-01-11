@@ -3,7 +3,8 @@ import { StyleSheet, Text, View, Button, ImageBackground, Image, Alert, Touchabl
 import styles from '../styles/Styles';
 import { FontAwesome  } from '@expo/vector-icons';
 import firebase from '../config';
-
+import Modal from 'react-native-modal';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 //Initializing the database object from firebase
 firebaseDatabase = firebase.database();
@@ -28,7 +29,9 @@ export default class HomeScreen extends Component {
 			tomorrowClosingHour : 'Loading...',
 			queueLength : 0,
 			joinedWaitList : false,
-			clientsInWait : []
+			clientsInWait : [],
+			annoucementVisible : false,
+			announcementMessage : ''
 		},
 		this.business_hoursRef = firebaseDatabase.ref('business_hours/'+daysOfWeek[dayOfWeek])
 		//Modulo (dayOfWeek+1) with 7 so that when dayOfWeek=6 it loops back to 0
@@ -210,10 +213,23 @@ export default class HomeScreen extends Component {
 	})
 	}
 
+
 	//Calls our listenForHours function once before rendering component
 	componentDidMount(){
+		this.props.navigation.setParams({makeAnnouncementVisible: () => this.setState({
+				announcementVisible : true
+			})}
+		)
 	    this.didFocusSubscription()
 		this.didBlurSubscription()
+		let announcementRef = firebaseDatabase.ref('Admin')
+		announcementRef.once('value',(snap) => {
+			this.setState({
+				announcementMessage : snap.child('news').val()
+			})
+		})
+
+		
 	}
 
 	componentWillUnmount(){
@@ -238,6 +254,13 @@ export default class HomeScreen extends Component {
 		if (navigation.getParam('admin','false') == 'true'){
 			headerObj['headerRight'] = () => (
 				<Button title='Admin' onPress={() => {navigation.navigate('AdminPortal')}}/>
+			)
+		}
+		else{
+			headerObj['headerRight'] = () => (
+				<TouchableOpacity onPress={navigation.getParam('makeAnnouncementVisible')}>
+						<Image source={require('../assets/hairDryer.png')} style={{padding: 10, marginRight: 20, height: 25, width: 25, resizeMode: 'cover'}}/>
+				</TouchableOpacity>
 			)
 		}
 
@@ -284,8 +307,18 @@ export default class HomeScreen extends Component {
 		return(
 			<ImageBackground source={require('../assets/barberbackground.jpg')} 
 			style={{alignItems: 'center', width: '100%', height: '100%'}}>
-					<Image source={require('../assets/logo.png')} style={{width: '45%', height: '45%', flex: 1, bottom : '-10%'}}/>
-					{status}				
+				<Image source={require('../assets/logo.png')} style={{width: '45%', height: '45%', flex: 1, bottom : '-10%'}}/>
+				{status}	
+				<Modal isVisible={this.state.announcementVisible}
+				onBackdropPress={()=> this.setState({announcementVisible:false})} hideModalContentWhileAnimating={true}
+				backdropTransitionOutTiming={0}>
+					<View style={{ flex: 1 , justifyContent:'center', alignItems:'center'}} >
+						<View style={{flex:0.30, borderRadius:30}} backgroundColor='white'>
+							<Image source={require('../assets/announcementPic.png')} style={{flex:2, width:null, height:null, resizeMode:'cover', borderTopLeftRadius:30, borderTopRightRadius:30}}/>
+							<Text style={{flex:1, padding:10}}>{this.state.announcementMessage}</Text>
+						</View>
+					</View>
+				</Modal>
 			</ImageBackground>
 		);}
 }

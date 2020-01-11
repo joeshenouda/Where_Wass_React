@@ -47,20 +47,22 @@ class InStoreWaitlist extends Component{
     render(){
         console.log('We are re-rendering InStoreWaitlist')
         return(
-            <View style= {inStoreStyles.container}>			
+            <View style= {inStoreStyles.container}>		
+            <ImageBackground source={require('../assets/background.jpg')} style={{width:'100%', height:'100%'}}>
 			    <Text style = {inStoreStyles.mainHeader}>Welcome to Wadie's Salon</Text>
-                <DialogInput isDialogVisible={this.state.isDialogVisible}
-                    title={"Add to Waitlist"}
-                    message={"Please enter your name to be added to the waitlist"}
-                    hintInput ={"John Doe"}
-                    textInputProps={{autoCapitalize:'words'}}
-                    submitInput = {(inputtext) => this.submitToWaitlist(inputtext)}
-                    closeDialog = {() => this.setState({isDialogVisible:false})}>
-                </DialogInput>
-                <Waitlist style = {{flex:3, color: 'white'}} removable = {false}/>
-                <TouchableOpacity onPress={() => this.addClient()} style={styles.fab}>
-                    <Text style={styles.fabIcon}>+</Text>
-                </TouchableOpacity>
+                    <DialogInput isDialogVisible={this.state.isDialogVisible}
+                        title={"Add to Waitlist"}
+                        message={"Please enter your name to be added to the waitlist"}
+                        hintInput ={"John Doe"}
+                        textInputProps={{autoCapitalize:'words'}}
+                        submitInput = {(inputtext) => this.submitToWaitlist(inputtext)}
+                        closeDialog = {() => this.setState({isDialogVisible:false})}>
+                    </DialogInput>
+                    <Waitlist style = {{flex:1, color: 'white'}} removable = {false}/>
+                    <TouchableOpacity onPress={() => this.addClient()} style={styles.fab}>
+                        <Text style={styles.fabIcon}>+</Text>
+                    </TouchableOpacity>
+            </ImageBackground>
             </View>
 
            
@@ -78,10 +80,10 @@ const styles = StyleSheet.create({
       alignItems: 'center', 
       justifyContent: 'center', 
       right: 20, 
-      bottom: 20, 
+      bottom: 60, 
       backgroundColor: 'black', 
       borderRadius: 30, 
-      elevation: 8, 
+      elevation: 10, 
       }, 
       fabIcon: { 
         fontSize: 40, 

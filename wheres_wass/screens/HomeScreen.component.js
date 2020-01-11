@@ -216,18 +216,20 @@ export default class HomeScreen extends Component {
 
 	//Calls our listenForHours function once before rendering component
 	componentDidMount(){
-		this.props.navigation.setParams({makeAnnouncementVisible: () => this.setState({
-				announcementVisible : true
-			})}
-		)
+		this.props.navigation.setParams({makeAnnouncementVisible: () => {
+			let announcementRef = firebaseDatabase.ref('Admin')
+			announcementRef.once('value',(snap) => {
+				this.setState({
+					announcementVisible : true,
+					announcementMessage : snap.child('news').val()
+				})
+			})
+		}
+
+		})
 	    this.didFocusSubscription()
 		this.didBlurSubscription()
-		let announcementRef = firebaseDatabase.ref('Admin')
-		announcementRef.once('value',(snap) => {
-			this.setState({
-				announcementMessage : snap.child('news').val()
-			})
-		})
+		
 
 		
 	}

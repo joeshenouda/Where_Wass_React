@@ -49,13 +49,11 @@ class WaitlistScreen extends Component{
     PersonStatic({client}) {
         
         return (
-            <View>
-                <View style={{flex : 1,flexDirection:'row',justifyContent: 'space-between', padding : 20}}>
-                    <Text style = {{fontSize: 25, marginHorizontal : 5}}>{client.name}</Text>
-                    <Text style = {{fontSize : 20}}>{Math.round((((new Date() - Date.parse(client.time))%86400000) % 3600000)/60000)}m</Text>
-                </View>
-                <View style = {styles.separator}></View>
+            <View backgroundColor='orange' style={{flex : 1,flexDirection:'row',justifyContent: 'space-between', padding : 20, marginBottom : 20, marginTop : 20}}>
+                <Text style = {{fontSize: 25, marginHorizontal : 5}}>{client.name}</Text>
+                <Text style = {{fontSize : 20}}>{Math.round((((new Date() - Date.parse(client.time))%86400000) % 3600000)/60000)}m</Text>
             </View>
+
         )
     }
 

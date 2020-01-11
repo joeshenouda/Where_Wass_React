@@ -5,7 +5,8 @@ import { StyleSheet,
 	 Button,
 	 Image, 
          ScrollView, 
-         SafeAreaView } from 'react-native';
+         SafeAreaView,
+         TouchableOpacity } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import {  createDrawerNavigator, DrawerItems  } from 'react-navigation-drawer';
 import { createStackNavigator  } from 'react-navigation-stack';

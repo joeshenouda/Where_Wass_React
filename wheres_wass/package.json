@@ -17,7 +17,7 @@
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
-    "react-native-calendars": "^1.214.0",
+    "react-native-calendars": "^1.220.0",
     "react-native-checkbox": "^2.0.0",
     "react-native-dialog-input": "^1.0.7",
     "react-native-elements": "^1.2.7",

@@ -17,15 +17,16 @@ const accountStyles = StyleSheet.create({
     },
 
     buttons: {
-        justifyContent: 'space-evenly'
+        marginHorizontal: 25,
     },
 
     textinput : {
-		borderColor : 'orange',
-		borderWidth : 2,
+		borderBottomColor : 'orange',
+		borderBottomWidth : 1,
 		padding : 10,
 		color : 'white',
-		margin:10
+        margin:20,
+        fontSize : 20
 	
     }
 }

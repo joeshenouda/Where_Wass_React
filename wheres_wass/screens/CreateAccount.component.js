@@ -83,11 +83,11 @@ class CreateAccountScreen extends Component {
                 behavior = 'padding'>
                 <View style={style.container} backgroundColor='black'>
                     <Image source={require('../assets/logo.png')} style={{width: null, height: null, flex: 1, resizeMode:'contain'}}/>
-                    <TextInput style={style.input} placeholder = 'Enter Full Name' onChangeText = { (text) => this.setState({name : text}) } />	
+                    <TextInput style={style.input}  placeholder = 'Enter Full Name' onChangeText = { (text) => this.setState({name : text}) } />	
                     <TextInput style={style.input} autoCapitalize = 'none' placeholder = 'Enter Phone number' keyboardType = 'number-pad' onChangeText = { (text) => this.setState({phoneNumber : text}) } />	
-                    <TextInput style={style.input} autoCapitalize = 'none' placeholder = 'Enter Email' onChangeText = { (text) => this.setState({email : text}) } />	
-                    <TextInput style={style.input} autoCapitalize = 'none' placeholder = 'Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({password : text})} />
-                    <TextInput style={style.input} autoCapitalize = 'none' placeholder = 'Re-Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({reenteredPS : text})} />
+                    <TextInput style={style.input}  autoCapitalize = 'none' placeholder = 'Enter Email' onChangeText = { (text) => this.setState({email : text}) } />	
+                    <TextInput style={style.input}  autoCapitalize = 'none' placeholder = 'Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({password : text})} />
+                    <TextInput style={style.input}  autoCapitalize = 'none' placeholder = 'Re-Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({reenteredPS : text})} />
                     <Button style={style.button} color= 'orange' title = 'Create Account' onPress = {() => this._onPressCreate()}/>
                 </View>
             </KeyboardAvoidingView>
@@ -106,7 +106,9 @@ const style = StyleSheet.create({
       input: {
         backgroundColor: 'black',
         margin:20,
-        borderBottomColor : 'orange'
+        color: 'white',
+        borderBottomWidth : 1,
+        borderBottomColor : 'white'
       },
       button: {
           alignSelf:'center'

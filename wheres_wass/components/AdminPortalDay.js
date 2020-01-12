@@ -21,18 +21,24 @@ class AdminPortalDay extends Component{
       mode: 'time',
       show: false,
       editingStart : true,
-      date : ''
+      date : '',
+      day: this.props.day,
+      month : this.props.month,
+      year : this.props.year
     }
-    this.hoursRef = firebaseDatabase.ref('business_hours/'+this.props.day)
+    let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    this.monthlyHoursRef=firebaseDatabase.ref('business_hours/'+months[this.state.month-1]+'/'+this.state.day)
+    console.log('Admin Portal day given was '+this.props.day)
   }
 
   updateWorkingStatus(prevWorking){
-    this.setState(prevState => ({
-      working : !prevState.working
-    }
+      this.setState(prevState => ({
+        working : !prevState.working,
+        show : false
+      }
     ))
 
-    !prevWorking ? this.hoursRef.child('001_o_status').set('ON') :  this.hoursRef.child('001_o_status').set('OFF')
+    !prevWorking ? this.monthlyHoursRef.child('working').set('ON') :  this.monthlyHoursRef.child('working').set('OFF')
   }
 
   setTime = (event, time) => {
@@ -51,25 +57,30 @@ class AdminPortalDay extends Component{
         hour = '12'
       }
     }
-    else if(hour > 12){
+    else if(hour >= 12){
       console.log('The hour is greater than 12 '+hour)
-      hour = hour % 12
+      if (hour == 12){
+        hour=12
+      }else{
+        hour = hour % 12
+      }
       AMorPM = 'PM'
     }
 
     const reconstructedTime = hour+':'+minute+' '+AMorPM;
 
     //Define which time node we are updating
-    let timeToUpdate = this.state.editingStart ? '002_o_opening' : '003_o_closing';
+    let timeToUpdate = this.state.editingStart ? 'start_time' : 'end_time';
     
     //Setting the state according to which time was updated (start or end)
-    if(timeToUpdate){ 
+    console.log('timeToUpdate is '+timeToUpdate)
+    if(timeToUpdate == 'start_time'){ 
       this.setState({
         show : false,
         startTime : reconstructedTime
       })
-        }
-        else{
+    }
+    else{
       this.setState({
         show : false,
         endTime : reconstructedTime
@@ -77,7 +88,7 @@ class AdminPortalDay extends Component{
  
     }
 
-    this.hoursRef.child(timeToUpdate).set(reconstructedTime)
+    this.monthlyHoursRef.child(timeToUpdate).set(reconstructedTime)
     
   
   }
@@ -109,21 +120,24 @@ class AdminPortalDay extends Component{
 
   listenForHours(FBref) {
 
-		FBref.on('value', (snap) => {
-			this.setState({
-				startTime : snap.child('002_o_opening').val(),
-				endTime : snap.child('003_o_closing').val(),
-				working : snap.child('001_o_status').val() == 'ON'
-			})
-		})
-
-		FBref.on('child_changed',(snap) => {
-			this.setState({
-				openingHour : snap.child('002_o_opening').val(),
-				closingHour : snap.child('003_o_closing').val(),
-				working : snap.child('001_o_status').val() == 'ON'
-			})
-    });
+		FBref.once('value', (snap) => {
+      if(snap.child('start_time').exists() && snap.child('end_time').exists()){
+        console.log('Snap exists')
+        this.setState({
+          startTime : snap.child('start_time').val(),
+          endTime : snap.child('end_time').val(),
+          working : snap.child('working').val() == 'ON'
+        })
+      }
+      else{
+        console.log('Snap does not exist')
+        this.setState({
+          startTime : 'Set Start Time',
+          endTime : 'Set End Time',
+          working : false
+        })
+      }
+    })
   }
 
   setDate(){
@@ -148,26 +162,32 @@ class AdminPortalDay extends Component{
 	  }
 
   }
+
+  componentWillUpdate(nextProp, nextState){
+    let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    this.monthlyHoursRef = firebaseDatabase.ref('business_hours/'+months[nextProp.month-1]+'/'+nextProp.day)
+    if(nextProp.day != this.props.day || nextProp.month != this.props.month){
+      this.listenForHours(this.monthlyHoursRef)
+    }
+  }
     
   componentDidMount(){
-    this.hoursRef.off()
-    this.listenForHours(this.hoursRef)
+    this.monthlyHoursRef.off()
+    this.listenForHours(this.monthlyHoursRef)
     this.setDate()
   }
 
   componentWillUnmount(){
-    this.hoursRef.off()
   }
 
   render(){
     return (
           <View style={styles.rect}>
-            <Text style={styles.dayOfWeek}>{this.props.day} {this.state.date}</Text>
-            <View style={{flexDirection:'row'}}>
-              <Switch trackColor = {{false :'black', true: 'orange'}} thumbColor = 'black' value= {this.state.working} onValueChange = {() => this.updateWorkingStatus(this.state.working)}/>
-              <Text style ={{fontSize : 15}}>Working</Text>
+            <Text style={styles.dayOfWeek}>{this.props.month}/{this.props.day}/{this.props.year}</Text>
+            <View style={{flexDirection:'row', marginBottom : 50, justifyContent:'center'}}>
+              <Switch trackColor = {{false :'white', true: 'green'}} thumbColor = 'white' value= {this.state.working} onValueChange = {() => this.updateWorkingStatus(this.state.working)}/>
+              <Text style ={{fontSize : 25, color:'white'}}>Working</Text>
             </View>
-            <View>
             <View style = {{flex : 1, flexDirection : 'row', marginHorizontal : 5}}>
               <Text style={styles.startTime}>Start Time:</Text>
                 <Text onPress = {this.timepickerStart} style = {styles.timeText}>{this.state.startTime}</Text>
@@ -177,8 +197,6 @@ class AdminPortalDay extends Component{
                 <Text style={styles.startTime}>End Time:</Text>
                 <Text onPress = {this.timepickerEnd} style = {styles.timeText}>{this.state.endTime}</Text>
               </View>
-
-            </View>
              { this.state.show && <DateTimePicker value= {new Date()}
                     mode={this.state.mode}
                     is24Hour={false}
@@ -186,7 +204,7 @@ class AdminPortalDay extends Component{
                     onChange={this.setTime} />
             }
 
-        </View>
+          </View>
     )
   }
 
@@ -196,26 +214,26 @@ const styles = StyleSheet.create({
     rect: {
       flex : 1,
       justifyContent : 'center',
-      flexDirection: 'column',
-      backgroundColor: "rgba(230, 230, 230,1)"
+      backgroundColor: "black"
     },
     dayOfWeek: {
-        color: "rgba(8,7,7,1)",
+        color: "white",
         fontSize: 25,
         textAlign: "center",
-        textDecorationLine: "underline"
+        textDecorationLine: "underline",
+        marginBottom : 20
       },
     materialCheckboxWithLabel2: {
       flex: 1,
     },
     startTime : {
         flex : 1,
-        color: "rgba(8,7,7,1)",
-        fontSize: 20,
+        color: "white",
+        fontSize: 25,
     },
     timeText: {
-        color: "gray",
-        fontSize: 20,
+        color: "white",
+        fontSize: 25,
         letterSpacing: 0,
         marginBottom : 10,
         textDecorationLine: "underline"
@@ -224,7 +242,7 @@ const styles = StyleSheet.create({
  
         flexDirection: "row",
         marginTop: 11,
-        marginLeft: 10
+        marginLeft: 20
     },
 
 })

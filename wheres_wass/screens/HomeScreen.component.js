@@ -1,17 +1,15 @@
 import React, { Component  } from 'react';
 import { StyleSheet, Text, View, Button, ImageBackground, Image, Alert, TouchableOpacity} from 'react-native';
-import styles from '../styles/Styles';
 import { FontAwesome  } from '@expo/vector-icons';
 import firebase from '../config';
 import Modal from 'react-native-modal';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 
 //Initializing the database object from firebase
 firebaseDatabase = firebase.database();
 
-//To convert numerical day of week received by Date() object to string for Firebase
-let daysOfWeek  =['Sunday', 'Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday']
-let dayOfWeek = new Date().getDay()
+//To convert numerical day of month received by Date() object to string for Firebase
+let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+let today = new Date()
 
 //object mapping uids to push ids
 let uid_to_pushRef = {}
@@ -30,50 +28,53 @@ export default class HomeScreen extends Component {
 			queueLength : 0,
 			joinedWaitList : false,
 			clientsInWait : [],
-			annoucementVisible : false,
+			announcementVisible : false,
 			announcementMessage : ''
 		},
-		this.business_hoursRef = firebaseDatabase.ref('business_hours/'+daysOfWeek[dayOfWeek])
-		//Modulo (dayOfWeek+1) with 7 so that when dayOfWeek=6 it loops back to 0
-		this.business_hoursRefTomorrow = firebaseDatabase.ref('business_hours/'+daysOfWeek[(dayOfWeek+1)%7])
+		this.business_hoursMonthlyRef = firebaseDatabase.ref('business_hours/'+months[today.getMonth()]+'/'+today.getDate())
+
+		let tomorrow = new Date(today)
+		tomorrow.setDate(today.getDate()+1)
+		this.business_hoursMonthlyRefTomorrow = firebaseDatabase.ref('business_hours/'+months[tomorrow.getMonth()]+'/'+tomorrow.getDate())
+
 		this.waitListRef = firebaseDatabase.ref('waitList');
 	}
 	//Called everytime a child changes on the database for the given day
-	listenForHours(FBref, isTomorrow) {
+	listenForHours(isTomorrow) {
+		console.log('Listen for hours called')
 
-		FBref.on('value', (snap) => {
-			if(isTomorrow){
-				this.setState({
-					tomorrowOpeningHour : snap.child('002_o_opening').val(),
-					tomorrowClosingHour : snap.child('003_o_closing').val(),
-					tomorrowWorking : snap.child('001_o_status').val()
-				})
-			}
-			else{
-				this.setState({
-					openingHour : snap.child('002_o_opening').val(),
-					closingHour : snap.child('003_o_closing').val(),
-					working : snap.child('001_o_status').val()
-				})
-			}
-		})
-
-		FBref.on('child_changed',(snap) => {
-			if(isTomorrow){
-				this.setState({
-					tomorrowOpeningHour : snap.child('002_o_opening').val(),
-					tomorrowClosingHour : snap.child('003_o_closing').val(),
-					tomorrowWorking : snap.child('001_o_status').val()
-				})
-			}
-			else{
-				this.setState({
-					openingHour : snap.child('002_o_opening').val(),
-					closingHour : snap.child('003_o_closing').val(),
-					working : snap.child('001_o_status').val()
-				})
-			}
-		});
+		let monthlyValExists = true
+		//First checks if we want TODAY's hours
+		if(!isTomorrow){
+			//This checks if the data exists in the monthly
+			this.business_hoursMonthlyRef.on('value', (snap) => {
+				if(snap.exists() && snap.child('start_time').exists() && snap.child('end_time').exists() && snap.child('working').exists()){
+					console.log('Monhtly EXISTS!!')
+					this.setState({
+						openingHour : snap.child('start_time').val(),
+						closingHour : snap.child('end_time').val(),
+						working : snap.child('working').val()
+					})
+				}
+			})
+				
+			
+		}
+		else{
+			//This first checks if the data exists in the monthly
+			this.business_hoursMonthlyRefTomorrow.on('value', (snap) => {
+				if(snap.exists() && snap.child('start_time').exists() && snap.child('end_time').exists() && snap.child('working').exists()){
+					this.setState({
+						tomorrowOpeningHour : snap.child('start_time').val(),
+						tomorrowClosingHour : snap.child('end_time').val(),
+						tomorrowWorking : snap.child('working').val()
+					})
+				}
+				else{
+					monthlyValExists = false
+				}
+			})
+		}
 		
 	}
 
@@ -192,8 +193,8 @@ export default class HomeScreen extends Component {
 
     	didFocusSubscription() {
 	    this.props.navigation.addListener('didFocus', () => {
-			this.listenForHours(this.business_hoursRef, false)
-			this.listenForHours(this.business_hoursRefTomorrow, true)
+			this.listenForHours(false)
+			this.listenForHours(true)
 			this.listenForWaitlist(this.waitListRef)
 			this.listenForAdmin()
 		})
@@ -201,8 +202,8 @@ export default class HomeScreen extends Component {
 
     	didBlurSubscription(){
 	    this.props.navigation.addListener('didBlur', () => { 
-		this.business_hoursRef.off()
-		this.business_hoursRefTomorrow.off()
+		this.business_hoursMonthlyRef.off()
+		this.business_hoursMonthlyRefTomorrow.off()
 		this.waitListRef.off()
 		//Reset everything
 		this.setState({
@@ -214,19 +215,28 @@ export default class HomeScreen extends Component {
 	}
 
 
-	//Calls our listenForHours function once before rendering component
+	//Shows announcement first thing when one opens the app
 	componentDidMount(){
 		this.props.navigation.setParams({makeAnnouncementVisible: () => {
+			console.log('Make annoucnement visible called')
 			let announcementRef = firebaseDatabase.ref('Admin')
-			announcementRef.once('value',(snap) => {
-				this.setState({
-					announcementVisible : true,
-					announcementMessage : snap.child('news').val()
+				announcementRef.once('value',(snap) => {
+					this.setState({
+						announcementVisible : true,
+						announcementMessage : snap.child('news').val()
+					})
 				})
-			})
-		}
-
+			}	
 		})
+
+
+		firebaseDatabase.ref('Admin').once('value',(snap) => {
+			this.setState({
+				announcementVisible : true,
+				announcementMessage : snap.child('news').val()
+			})
+		})
+
 	    this.didFocusSubscription()
 		this.didBlurSubscription()
 		
@@ -235,8 +245,8 @@ export default class HomeScreen extends Component {
 	}
 
 	componentWillUnmount(){
-		this.business_hoursRef.off()
-		this.business_hoursRefTomorrow.off()
+		this.business_hoursMonthlyRefTomorrow.off()
+		this.business_hoursMonthlyRef.off()
 		this.waitListRef.off()
 	}
 

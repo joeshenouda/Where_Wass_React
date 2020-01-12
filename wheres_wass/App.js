@@ -20,6 +20,8 @@ import CreateAccountScreen from './screens/CreateAccount.component';
 import AdminPortalScreen from './screens/Admin.component';
 import WaitlistScreen from './screens/WaitlistScreen.component';
 import InStoreWaitlistScreen from './screens/InStoreWaitlist.component';
+import MonthlyScheduleScreen from './screens/MonthlyScheduleScreen.component';
+import AdminMonthlyScreen from './screens/AdminMonthly.component';
 
 const headerConfigs = { 
     headerTitleStyle: {
@@ -49,12 +51,16 @@ InStoreWaitlistStack.navigationOptions = ({ navigation }) => {
   
     return {
       tabBarVisible,
+      tabBarLabel : 'In Store Waitlist',
+      tabBarIcon : () => {
+          return <FontAwesome name="list" size={25} style = {{color:'black'}}/>
+      }
     };
   };
 
 const AdminPortalTabs = createBottomTabNavigator(
     {
-        'Admin Portal' : AdminPortalScreen,
+        'Admin Portal' : AdminMonthlyScreen,
         Waitlist : WaitlistScreen,
         InStoreWaitlist : InStoreWaitlistStack
     },
@@ -98,13 +104,12 @@ const HomeNavigator = createStackNavigator(
 	    defaultNavigationOptions: headerConfigs 
     }
 )
-
-const WeeklyNavigator = createStackNavigator(
+const MonthlyNavigator = createStackNavigator(
     {
-	Weekly : WeeklyScheduleScreen,
+        Monthly : MonthlyScheduleScreen,
     },
     {
-	defaultNavigationOptions: headerConfigs,
+        defaultNavigationOptions: headerConfigs,
     }
 )
 
@@ -144,7 +149,7 @@ const CustomDrawerContentComponent = props => (
 
 const DrawerNav = createDrawerNavigator({
   Home: HomeNavigator,
-  'Weekly Schedule': WeeklyNavigator,
+  'Monthly Schedule' : MonthlyNavigator,
   'About Us': InfoNavigator,
   Account : AccountNavigator
 },

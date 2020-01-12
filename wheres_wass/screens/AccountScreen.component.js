@@ -157,9 +157,9 @@ class Account extends Component{
 					<TextInput style = {accountStyles.textinput} autoCapitalize = 'none' placeholder = 'Enter Email' onChangeText = { (text) => this.setState({email : text}) } />	
 					<TextInput style = {accountStyles.textinput} autoCapitalize = 'none' placeholder = 'Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({password : text})} />
 					<View style={{margin:10}}>
-						<Button color ='orange' title = 'Log in with email' onPress = {() => this.loginWithEmail()}/>
-						<SocialIcon title= 'Sign in with Facebook' button type="facebook" onPress = {() => this.loginWithFacebook()}/>
-						<Button color ='orange' title = 'Create account with Email' onPress = {() => this.props.navigation.navigate('CreateAccount')} />
+						<Button style = {accountStyles.buttons} color ='orange' title = 'Log in with email' onPress = {() => this.loginWithEmail()}/>
+						<SocialIcon style = {accountStyles.buttons} title= 'Sign in with Facebook' button type="facebook" onPress = {() => this.loginWithFacebook()}/>
+						<Button style = {accountStyles.buttons} color ='orange' title = 'Create account with Email' onPress = {() => this.props.navigation.navigate('CreateAccount')} />
 					</View>
 				</View>
 			</KeyboardAvoidingView>

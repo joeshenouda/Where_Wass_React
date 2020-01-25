@@ -28,6 +28,7 @@ export default class HomeScreen extends Component {
 			queueLength : 0,
 			joinedWaitList : false,
 			clientsInWait : [],
+			currUserSnapKey : '',
 			announcementVisible : false,
 			announcementMessage : ''
 		},
@@ -88,24 +89,18 @@ export default class HomeScreen extends Component {
 			if(currUser != null && snap.val().uid == currUser.uid){
 				console.log('Child added called for waitlist with uid = '+snap.val().uid+ ' and currentUser uid is '+firebase.auth().currentUser.uid)
 				this.setState(prevState => ({
-					queueLength : prevState.clientsInWait.includes(snap.val().uid) ? prevState.queueLength : prevState.queueLength+1,
+					queueLength : prevState.queueLength,
 					joinedWaitList : true,
-					clientsInWait : prevState.clientsInWait.concat(snap.val().uid)
+					clientsInWait : prevState.clientsInWait.concat(snap.key),
+					currUserSnapKey : snap.key
 				}))
 			}
 			else{
-				if(!this.state.clientsInWait.includes(snap.val().uid) || snap.val().uid == null){
+				if(!this.state.clientsInWait.includes(snap.key) || snap.val().uid == null){
+					console.log('Child added called for waitlist with snap key '+snap.key+' and joinedWaitlist is '+this.state.joinedWaitList)
 					this.setState(prevState => ({
-						queueLength : prevState.queueLength+1,
-						clientsInWait : prevState.clientsInWait.concat(snap.val().uid),
-						//First checks that currUser is not null if it is null make joinedWaitList false
-						//Then assigns joinedWaitList to true only if clientInWait contains the currUser's uid
-						joinedWaitList : currUser ? (prevState.clientsInWait.includes(currUser.uid) ? true : false) : false
-					}))
-				}
-				else{
-					this.setState(prevState => ({
-						joinedWaitList : currUser ? (prevState.clientsInWait.includes(currUser.uid) ? true : false) : false
+						queueLength : !prevState.joinedWaitList ? prevState.queueLength+1 : prevState.queueLength,
+						clientsInWait : prevState.clientsInWait.concat(snap.key),
 					}))
 				}
 			}
@@ -115,19 +110,21 @@ export default class HomeScreen extends Component {
 			var currUser = firebase.auth().currentUser;
 			if(currUser != null && snap.val().uid == currUser.uid){
 				this.setState(prevState => ({
-					queueLength : prevState.queueLength-1,
+					queueLength : prevState.clientsInWait.length - 1,
 					joinedWaitList : false,
 					//filter returns a new array with all the elements that pass the test in the function
 					//In this case we keeping all the uids that are not eqaul to the one that was removed in Firebase
-					clientsInWait : prevState.clientsInWait.filter(uids => uids != snap.val().uid)
+					clientsInWait : prevState.clientsInWait.filter(keys => keys != snap.key)
 				}))
 			}
 			else{
 				this.setState(prevState => ({
-					queueLength : prevState.queueLength - 1,
+					//If the current user is behind the person who was just removed from the queue we will decrease queue length
+					//else keep it the same 
+					queueLength : (prevState.currUserSnapKey.localeCompare(snap.key) > 0) ? prevState.queueLength - 1 : prevState.queueLength,
 					//filter returns a new array with all the elements that pass the test in the function
 					//In this case we keeping all the uids that are not eqaul to the one that was removed in Firebase
-					clientsInWait : prevState.clientsInWait.filter(uids => uids != snap.val().uid)
+					clientsInWait : prevState.clientsInWait.filter(keys => keys != snap.key)
 				}))
 			}
 		})
@@ -292,7 +289,7 @@ export default class HomeScreen extends Component {
 			return(
 				<View style = {Homestyles.statusBox}>
 					<Text style={{ color: 'white', justifyContent: 'center', fontSize: 35,}}>Where's Wass?</Text>
-					<Text style = {{color: 'orange', justifyContent: 'center', fontSize : 25}}> Waitlist: {this.state.queueLength} clients</Text>
+					<Text style = {{color: 'orange', justifyContent: 'center', fontSize : 20, marginBottom : 10}}> {this.state.queueLength} clients ahead of you</Text>
 					{waitlistButton}
 					<Text style = {Homestyles.statusText}>{this.state.openingHour}</Text>
 					<Text style = {{fontSize:20, color: 'gray'}}>to</Text>

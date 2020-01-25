@@ -1,9 +1,10 @@
 import React, { Component  } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import styles from '../styles/Styles';
+import { StyleSheet, Image, View, Button, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import {Calendar} from 'react-native-calendars';
 import AdminPortalDay from '../components/AdminPortalDay';
+import DialogInput from 'react-native-dialog-input';
+
 
 
 export default class AdminMonthly extends Component {
@@ -18,6 +19,16 @@ export default class AdminMonthly extends Component {
             isDialogVisible : false
         }
     }
+
+    updateAnnouncement(newAnnouncement){
+		let announcementRef = firebaseDatabase.ref('Admin/')
+		announcementRef.update({
+			news: newAnnouncement
+		})
+		this.setState({
+			isDialogVisible:false
+		})
+	}
 
     static navigationOptions = ({navigation}) => {
         return ({
@@ -74,6 +85,14 @@ export default class AdminMonthly extends Component {
             <View style={{flex:1}}>
                 <AdminPortalDay month = {this.state.selectedMonth} day={this.state.selectedDay} year={this.state.selectedYear}/>
             </View>
+            <DialogInput isDialogVisible={this.state.isDialogVisible}
+                title={"Update announcement"}
+                message={"Enter new announcement"}
+                hintInput ={"Shop closed"}
+                textInputProps={{autoCapitalize:'words'}}
+                submitInput = {(inputtext) => this.updateAnnouncement(inputtext)}
+                closeDialog = {() => this.setState({isDialogVisible:false})}>
+            </DialogInput>
             <TouchableOpacity onPress={() => this.setState({isDialogVisible:true})} style={styles.fab}>
                 <Image source={require('../assets/hairDryer.png')} style={{padding: 10, height: 25, width: 25, resizeMode: 'cover'}}/>
             </TouchableOpacity>
@@ -93,8 +112,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center', 
 		justifyContent: 'center', 
 		right: 20, 
-		bottom: 40, 
-		backgroundColor: 'black', 
+		bottom: 220, 
+		backgroundColor: 'orange', 
 		borderRadius: 30, 
 		elevation: 10, 
 		}, 

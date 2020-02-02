@@ -268,8 +268,11 @@ export default class HomeScreen extends Component {
 		else{
 			headerObj['headerRight'] = () => (
 				<TouchableOpacity onPress={navigation.getParam('makeAnnouncementVisible')}>
-						<Image source={require('../assets/hairDryer.png')} style={{padding: 10, marginRight: 20, height: 25, width: 25, resizeMode: 'cover'}}/>
-				</TouchableOpacity>
+			    	<View style={{flex:1}}>
+						<Image source={require('../assets/hairDryer.png')} style={{padding: 10, marginRight: 20, height: 25, width: 25, top:10 , resizeMode: 'cover'}}/>
+			    			<View style={Homestyles.redBadge}/>
+			</View>	
+			    </TouchableOpacity>
 			)
 		}
 
@@ -350,6 +353,15 @@ const Homestyles = StyleSheet.create({
 	tomorrowStatus: {
 		color : 'white',
 		fontSize: 15,
+	},
+	redBadge: {
+	    backgroundColor:'red',
+	    position:'absolute',
+	    width: 15,
+	    height: 15,
+	    right: 10,
+	    top:5,
+	    borderRadius: 80,
 	}
 })
 

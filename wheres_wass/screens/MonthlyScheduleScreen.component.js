@@ -21,6 +21,44 @@ export default class MonthlyScheduleScreen extends Component {
             start_time : 'Loading...',
             end_time : 'Loading...',
         }
+        //Creating the string for min date on calendar
+        this.today = today.getFullYear()
+
+        if(today.getMonth()+1 < 10){
+            this.today=this.today+'-0'+ (today.getMonth()+1)
+        }
+        else{
+            this.today=this.today+'-'+ (today.getMonth()+1)
+        }
+
+        if(today.getDate() < 10){
+            this.today=this.today+'-0'+ today.getDate()
+        }
+        else{
+            this.today=this.today+'-'+ today.getDate()
+        }
+
+        //Using two months later to set max date on calendar
+        let twoMonthsLater = new Date()
+        twoMonthsLater.setMonth(twoMonthsLater.getMonth()+2)
+        //Of the form YYYY-MM-DD
+        this.twoMonthsLaterString = twoMonthsLater.getFullYear()
+
+        if(twoMonthsLater.getMonth()+1 < 10){
+            this.twoMonthsLaterString=this.twoMonthsLaterString+'-0'+ (twoMonthsLater.getMonth()+1)
+        }
+        else{
+            this.twoMonthsLaterString=this.twoMonthsLaterString+'-'+ (twoMonthsLater.getMonth()+1)
+        }
+
+        if(twoMonthsLater.getDate() < 10){
+            this.twoMonthsLaterString=this.twoMonthsLaterString+'-0'+ twoMonthsLater.getDate()
+        }
+        else{
+            this.twoMonthsLaterString=this.twoMonthsLaterString+'-'+ twoMonthsLater.getDate()
+        }
+
+
     }
 
     static navigationOptions = ({navigation}) => {
@@ -106,14 +144,15 @@ export default class MonthlyScheduleScreen extends Component {
                     this.grabMonthlyHours(day)
                 }}
                 monthFormat={'MMM yyyy'}
+                maxDate={this.twoMonthsLaterString}
+                minDate={this.today} 
                 hideArrows={false}
-                hideExtraDays={false}
+                disableArrowLeft={true}
+                hideExtraDays={true}
                 disableMonthChange={false}
                 firstDay={7}
                 hideDayNames={false}
                 showWeekNumbers={false}
-                onPressArrowLeft={substractMonth => substractMonth()}
-                onPressArrowRight={addMonth => addMonth()}
                 markedDates={{[this.state.selectedDate] : {selected: true, disableTouchEvent: true, selectedDotColor: 'orange'}}}
                 style={{
                     flex:1,

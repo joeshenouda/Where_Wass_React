@@ -142,7 +142,13 @@ const CustomDrawerContentComponent = props => (
 	<SafeAreaView style = {{ flex:1 }} forceInset={{ top: 'always' , horizontal: 'never' }}>
 		<Image style={{width:280, height:200}} source = {require('./assets/navigationheader.jpg')}/>
 		<DrawerItems {...props}/>
-	</SafeAreaView>
+    		<FontAwesome.Button name='yelp' color='red' size={45} backgroundColor='black'>
+		    <Text styel={{color:'white'}}>
+			    Review us on Yelp!
+		    </Text>
+    		</FontAwesome.Button>
+    		<FontAwesome.Button name='google' size={45} backgroundColor='black'/>
+    	</SafeAreaView>
 	</ScrollView>
 )
 

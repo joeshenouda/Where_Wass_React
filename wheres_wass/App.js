@@ -143,11 +143,16 @@ const CustomDrawerContentComponent = props => (
 		<Image style={{width:280, height:200}} source = {require('./assets/navigationheader.jpg')}/>
 		<DrawerItems {...props}/>
     		<FontAwesome.Button name='yelp' color='red' size={45} backgroundColor='black'>
-		    <Text styel={{color:'white'}}>
+		    <Text style={{color:'white'}}>
 			    Review us on Yelp!
 		    </Text>
     		</FontAwesome.Button>
-    		<FontAwesome.Button name='google' size={45} backgroundColor='black'/>
+    		<FontAwesome.Button name='google' size={45} backgroundColor='black'>
+
+		    <Text style={{color:'white'}}>
+			    Review us on Google!
+		    </Text>
+    		</FontAwesome.Button>
     	</SafeAreaView>
 	</ScrollView>
 )

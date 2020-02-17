@@ -4,9 +4,10 @@ import { StyleSheet,
 	 View, 
 	 Button,
 	 Image, 
-         ScrollView, 
-         SafeAreaView,
-         TouchableOpacity } from 'react-native';
+     ScrollView, 
+     SafeAreaView,
+     TouchableOpacity,
+     Linking } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import {  createDrawerNavigator, DrawerItems  } from 'react-navigation-drawer';
 import { createStackNavigator  } from 'react-navigation-stack';
@@ -142,12 +143,12 @@ const CustomDrawerContentComponent = props => (
 	<SafeAreaView style = {{ flex:1 }} forceInset={{ top: 'always' , horizontal: 'never' }}>
 		<Image style={{width:280, height:200}} source = {require('./assets/navigationheader.jpg')}/>
 		<DrawerItems {...props}/>
-    		<FontAwesome.Button name='yelp' color='red' size={45} backgroundColor='black'>
+    		<FontAwesome.Button name='yelp' color='red' size={45} backgroundColor='black' onPress={ ()=> Linking.openURL('https://www.yelp.com/biz/wadies-salon-east-brunswick')}>
 		    <Text style={{color:'white'}}>
 			    Review us on Yelp!
 		    </Text>
     		</FontAwesome.Button>
-    		<FontAwesome.Button name='google' size={45} backgroundColor='black'>
+    		<FontAwesome.Button name='google' size={45} backgroundColor='black' onPress={ ()=> Linking.openURL('https://www.google.com/search?sxsrf=ACYBGNQkFmj0acgn2jJuN-sScOxCCDWkmw%3A1581353381215&ei=pYlBXrflDOupytMPyKSMkAQ&q=wadies+salon+reviews&oq=wadies+salon+reviews&gs_l=psy-ab.3...397.397..670...0.0..0.0.0.......0....1..gws-wiz.0WWJYRELvgE&ved=0ahUKEwj3y7S0uMfnAhXrlHIEHUgSA0IQ4dUDCAs&uact=5#lrd=0x89c3cf6c9809134f:0x894032f0cfe7697c,1,,,')}>
 
 		    <Text style={{color:'white'}}>
 			    Review us on Google!

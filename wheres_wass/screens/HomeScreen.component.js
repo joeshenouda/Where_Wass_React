@@ -291,7 +291,6 @@ export default class HomeScreen extends Component {
 
 			return(
 				<View style = {Homestyles.statusBox}>
-					<Text style={{ color: 'white', justifyContent: 'center', fontSize: 35,}}>Where's Wass?</Text>
 					<Text style = {{color: 'orange', justifyContent: 'center', fontSize : 20, marginBottom : 10}}> {this.state.queueLength} clients ahead of you</Text>
 					{waitlistButton}
 					<Text style = {Homestyles.statusText}>{this.state.openingHour}</Text>
@@ -305,7 +304,6 @@ export default class HomeScreen extends Component {
 		const notWorkingLayout = () => {
 			return(
 				<View style ={Homestyles.statusBox}>
-					<Text style={{ color: 'white', justifyContent: 'center', fontSize: 35,}}>Where's Wass?</Text>
 					<Text style = {{color:'white', fontSize:35, alignSelf : 'center'}}>Off</Text>
 					{workingTomorrow}
 				</View>

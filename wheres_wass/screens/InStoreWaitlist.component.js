@@ -56,7 +56,8 @@ class InStoreWaitlist extends Component{
                         hintInput ={"John Doe"}
                         textInputProps={{autoCapitalize:'words'}}
                         submitInput = {(inputtext) => this.submitToWaitlist(inputtext)}
-                        closeDialog = {() => this.setState({isDialogVisible:false})}>
+                        closeDialog = {() => this.setState({isDialogVisible:false})}
+                        dialogStyle= {{marginBottom:200}}>
                     </DialogInput>
                     <Waitlist style = {{flex:1, color: 'white'}} removable = {false}/>
                     <TouchableOpacity onPress={() => this.addClient()} style={styles.fab}>

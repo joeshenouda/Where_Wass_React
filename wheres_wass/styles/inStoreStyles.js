@@ -9,8 +9,8 @@ const inStoreStyles = StyleSheet.create({
     },
 
     mainHeader: {
-    alignContent: 'center',
-    fontSize: 30,
+    alignSelf: 'center',
+    fontSize: 40,
     fontFamily: 'serif',
     color: 'orange'
     },

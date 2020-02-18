@@ -1,5 +1,6 @@
 import React, { Component  } from 'react';
-import { StyleSheet, Text, View, Button, ImageBackground, Image, Alert, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Button, ImageBackground, Image, Alert,ScrollView,
+	 TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import { FontAwesome  } from '@expo/vector-icons';
 import firebase from '../config';
 import Modal from 'react-native-modal';
@@ -322,12 +323,22 @@ export default class HomeScreen extends Component {
 				<Modal isVisible={this.state.announcementVisible}
 				onBackdropPress={()=> this.setState({announcementVisible:false})} hideModalContentWhileAnimating={true}
 				backdropTransitionOutTiming={0}>
-					<View style={{ flex: 1 , justifyContent:'center', alignItems:'center'}} >
-						<View style={{flex:0.30, borderRadius:30}} backgroundColor='white'>
-							<Image source={require('../assets/announcementPic.png')} style={{flex:2, width:null, height:null, resizeMode:'cover', borderTopLeftRadius:30, borderTopRightRadius:30}}/>
-							<Text style={{flex:1, padding:10}}>{this.state.announcementMessage}</Text>
+				<TouchableOpacity 
+					activeOpacity={1} 
+					onPressOut={() => {this.setModalVisible(false)}}>
+					<ScrollView 
+					directionalLockEnabled={true} 
+					>
+					<TouchableWithoutFeedback>
+					<View style={{ flex: 1, justifyContent:'center', alignContent:'center', alignItems:'center'}} >
+						<View style={{flex:1, borderRadius:30, width : 500}} backgroundColor='white'>
+							<Image source={require('../assets/announcementPic.png')} style={{flex:1, resizeMode:'cover', borderTopLeftRadius:30, borderTopRightRadius:30}}/>
+							<Text style={{flex:3, padding:10, alignSelf:'center'}}>{this.state.announcementMessage}</Text>
 						</View>
-					</View>
+					</View>					
+					</TouchableWithoutFeedback>
+					</ScrollView>
+				</TouchableOpacity> 
 				</Modal>
 			</ImageBackground>
 		);}

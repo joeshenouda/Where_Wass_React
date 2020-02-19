@@ -29,6 +29,7 @@ export default class HomeScreen extends Component {
 			queueLength : 0,
 			joinedWaitList : false,
 			clientsInWait : [],
+			waitlistOn : true,
 			currUserSnapKey : '',
 			announcementVisible : false,
 			announcementMessage : ''
@@ -82,6 +83,14 @@ export default class HomeScreen extends Component {
 
 	//Listener for children added to Wait list
 	listenForWaitlist(FBWaitRef){
+
+	    	//Checks if wass has turned off waitlist feature
+	    	firebaseDatabase.ref('/Admin/waitlist').on('value', (snap) => {
+		    this.setState({
+				waitlistOn : snap.val() == "ON" ? true : false
+			})
+
+		})
 
 		FBWaitRef.orderByKey().on('child_added', (snap) => {
 			console.log('Child added was called for waitList')
@@ -151,6 +160,8 @@ export default class HomeScreen extends Component {
 	//Function to add user to waitlist
 	addToWaitList = () => {
 		let user = firebase.auth().currentUser;
+		let waitlist = this.state.waitlistOn
+		console.log('The value of waitlist is '+waitlist);
 		if (user == null){
 			// Works on both Android and iOS
 			Alert.alert(
@@ -171,6 +182,21 @@ export default class HomeScreen extends Component {
 				],
 				{cancelable: false},
 			);
+		}
+		else if (!waitlist){
+		    Alert.alert(
+			    //Alert
+			    'Sorry',
+			    //Alert message
+			    'We are not currently accepting anymore clients on the waitlist',
+			    [
+				    {
+					text: 'Ok',
+				    },
+			    ],
+			    {cancelable: false},
+			);
+
 		}
 		else{
 			let dateNow = new Date()
@@ -332,7 +358,7 @@ export default class HomeScreen extends Component {
 					<TouchableWithoutFeedback>
 					<View style={{ flex: 1, justifyContent:'center', alignContent:'center', alignItems:'center'}} >
 						<View style={{flex:1, borderRadius:30, width : 500}} backgroundColor='white'>
-							<Image source={require('../assets/announcementPic.png')} style={{flex:1, resizeMode:'cover', borderTopLeftRadius:30, borderTopRightRadius:30}}/>
+							<Image source={require('../assets/announcementPic.png')} style={{flex:1, resizeMode:'cover', width:500, height: 300, borderTopLeftRadius:30, borderTopRightRadius:30}}/>
 							<Text style={{flex:3, padding:10, alignSelf:'center'}}>{this.state.announcementMessage}</Text>
 						</View>
 					</View>					

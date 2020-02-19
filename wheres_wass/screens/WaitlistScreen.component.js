@@ -5,7 +5,7 @@ import { StyleSheet,
          ScrollView,
          FlatList,
          SafeAreaView,
-         Button,
+         Switch,
          TouchableOpacity
          } from 'react-native';
 import AdminPortalDay from '../components/AdminPortalDay';
@@ -21,7 +21,8 @@ class WaitlistScreen extends Component{
         this.state = {
             arrayOfWaitingClients: [],
             isFetching : false,
-            now : new Date()
+            now : new Date(),
+            waitlistOn : true
         }
         this.waitRef = firebaseDatabase.ref('waitList/');
     }
@@ -62,6 +63,15 @@ class WaitlistScreen extends Component{
 
     //Listens and updates waitlist
     listenForWaitList(FBWaitRef){
+        
+        //Checks if wass has turned off waitlist feature
+        firebaseDatabase.ref('/Admin/waitlist').on('value', (snap) => {
+            this.setState({
+                waitlistOn : snap.val() == "ON" ? true : false
+            })
+
+        })
+
         FBWaitRef.orderByKey().on('child_added', (snap) => {
             var identifier;
             console.log('Child added called for waitlistScreen')
@@ -101,22 +111,43 @@ class WaitlistScreen extends Component{
 
     render(){
         if(this.props.removable){
+            //Returns two different layouts depending b/c inStoreWaitlist also uses this component and should not have ability to remove clients
             return(
-                <SafeAreaView style={{flex:1}}>
-                    <FlatList
-                    data={this.state.arrayOfWaitingClients}
-                    renderItem = {({item}) => <this.Person client={item}/>}
-                    keyExtractor = {item => item.id}
-                    extraData={this.state.arrayOfWaitingClients, this.state.now}
-                    refreshing={this.state.isFetching}
-                    onRefresh= {() => {
-                                        this.setState({isFetching : true})
-                                        this.setState({isFetching:false})
+                <View style={{flex:1}}>
+                    <View style={{flexDirection : 'row', alignSelf:'center'}}>
+                    <Switch trackColor = {{false :'white', true: 'green'}} thumbColor = 'white' value= {this.state.waitlistOn} onValueChange = {(newVal) => {
+                            if(newVal){
+                                firebaseDatabase.ref('/Admin').child('waitlist').set('ON')
+                            }
+                            else{
+                                firebaseDatabase.ref('/Admin').child('waitlist').set('OFF')
+
+                            }
+                        }
+                        }/>
+                    <Text style={{fontSize:30}}>Waitlist</Text>
+                    </View>
+                    <View style={{backgroundColor:'black', width:400, height:5}}></View>
+
+                    <SafeAreaView style={{flex:1}}>
+                        <FlatList
+                        data={this.state.arrayOfWaitingClients}
+                        renderItem = {({item}) => <this.Person client={item}/>}
+                        keyExtractor = {item => item.id}
+                        extraData={this.state.arrayOfWaitingClients, this.state.now}
+                        refreshing={this.state.isFetching}
+                        onRefresh= {() => {
+                                            this.setState({isFetching : true})
+                                            this.setState({isFetching:false})
+                                            }
                                         }
-                                    }
-                    />
-                </SafeAreaView>
-            )
+                        />
+
+
+                    </SafeAreaView>
+
+                </View>
+              )
         }
         else{
             return(

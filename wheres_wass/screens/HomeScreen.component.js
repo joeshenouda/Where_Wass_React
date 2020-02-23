@@ -156,7 +156,7 @@ export default class HomeScreen extends Component {
 				this.setState(prevState => ({
 					//If the current user is behind the person who was just removed from the queue we will decrease queue length
 					//else keep it the same 
-					queueLength : (prevState.currUserSnapKey.localeCompare(snap.key) > 0) ? prevState.queueLength - 1 : prevState.queueLength,
+					queueLength : (prevState.currUserSnapKey.localeCompare(snap.key) > 0) || prevState.joinedWaitList==false ? prevState.queueLength - 1 : prevState.queueLength,
 					//filter returns a new array with all the elements that pass the test in the function
 					//In this case we keeping all the uids that are not eqaul to the one that was removed in Firebase
 					clientsInWait : prevState.clientsInWait.filter(keys => keys != snap.key)
@@ -339,8 +339,12 @@ export default class HomeScreen extends Component {
 
 		//Two layouts for switching b/t working and non working layouts
 		const workingLayout = () => {
-			var waitlistButton = this.state.joinedWaitList ? <Button color = 'red' title = 'Leave Waitlist' onPress = {() => this.removeFromWaitList()}/> : 
-														<Button color = 'orange' title = 'Join waitlist' onPress = {() => this.addToWaitList()}/>
+			var waitlistButton = this.state.joinedWaitList ? <TouchableOpacity style={{alignItems:'center', backgroundColor:'red', padding:15, borderRadius:30}} onPress = {() => this.removeFromWaitList()}>
+																<Text style={{color:'white', fontSize:15}}>Leave Waitlist</Text> 
+															</TouchableOpacity> : 
+														<TouchableOpacity style={{alignItems:'center', backgroundColor:'orange', padding:15, borderRadius:30}} activeOpacity={0.3} onPress = {() => this.addToWaitList()}>
+															<Text style={{color:'white', fontSize:15,fontWeight:'bold'}}>Join Waitlist</Text>
+														</TouchableOpacity>
 
 			return(
 				<View style = {Homestyles.statusBox}>
@@ -402,7 +406,8 @@ const Homestyles = StyleSheet.create({
 		backgroundColor : 'black',
 		opacity : 0.8,
 		margin : 30,
-		padding : 35,
+		padding:'5%',
+		paddingHorizontal:'10%',
 		top : '-2.5%'
 	},
 	statusText: {

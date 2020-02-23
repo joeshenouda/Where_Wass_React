@@ -132,16 +132,13 @@ class Account extends Component{
 			return(
 				<View style = {{flex:1,justifyContent:'space-evenly', alignItems :'center', backgroundColor:'black'}}>
 					<Image source={require('../assets/logo.png')}
-						style={{width: '50%', height: '40%', justifyContent: 'flex-start'}}></Image>
-					<Text style={{fontSize:30, color : 'white'}}>Hello, Signed In as:</Text>
+						style={{width: '50%', height: '50%', justifyContent: 'flex-start'}}></Image>
+					<Text style={{fontSize:30, color : 'white', marginTop:-100}}>Hello, Signed In as:</Text>
 					<View>
 						<Text style={{color: 'white'}}>Your Name:</Text>
 						<Text style={{ fontWeight:'bold', fontSize : 30, color:'white'}}>{this.state.user.displayName}</Text>	
 					</View>
-					<View>
-						<Text style={{color: 'white'}}>Your Email:</Text>
-						<Text style={{ fontWeight:'bold',fontSize : 25, color:'white'}}>{this.state.user.email}</Text> 
-					</View>
+
 					<Button title = 'Sign out'  color='orange'  onPress = {() => firebase.auth().signOut().then( () => this.props.navigation.navigate('Home'))}/>
 
 

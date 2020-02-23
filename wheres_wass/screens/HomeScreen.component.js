@@ -4,6 +4,9 @@ import { StyleSheet, Text, View, Button, ImageBackground, Image, Alert,ScrollVie
 import { FontAwesome  } from '@expo/vector-icons';
 import firebase from '../config';
 import Modal from 'react-native-modal';
+//For push notifications
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
 
 //Initializing the database object from firebase
 firebaseDatabase = firebase.database();
@@ -17,6 +20,28 @@ let uid_to_pushRef = {}
 
 //Home component to show current hours
 export default class HomeScreen extends Component {
+	//For push notifications
+	 registerForPushNotificationsAsync = async() => {
+		const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+		// only asks if permissions have not already been determined, because
+		// iOS won't necessarily prompt the user a second time.
+		// On Android, permissions are granted on app installation, so
+		// `askAsync` will never prompt the user
+
+		// Stop here if the user did not grant permissions
+		if (status !== 'granted') {
+		alert('No notification permissions!');
+		return;
+		}
+	
+		// Get the token that identifies this device
+		let token = await Notifications.getExpoPushTokenAsync();
+
+		if(firebase.auth().currentUser){
+			console.log('Adding to firebase databse expotoken')	
+			firebaseDatabase.ref('/expoTokens').child(firebase.auth().currentUser.uid).set({expoToken: token})
+		}
+	}
 	constructor(props){
 		super(props);
 		this.state = {
@@ -142,7 +167,8 @@ export default class HomeScreen extends Component {
 	//Listen for admin will change the header bar by adding a button when the authState changes and is Wass or Joe Shenouda
 	listenForAdmin(){
 		const unsubscribe = firebase.auth().onAuthStateChanged(
-			(currentUser) =>{
+			async (currentUser) =>{
+				await this.registerForPushNotificationsAsync();
 				//Immediateyl unsubscribe the onAuthStateChanged because we override it again in AccountScreen
 				unsubscribe();
 				this.setState({user : currentUser})
@@ -215,7 +241,7 @@ export default class HomeScreen extends Component {
 		)
 	}
 
-    	didFocusSubscription() {
+		didFocusSubscription() {
 	    this.props.navigation.addListener('didFocus', () => {
 			this.listenForHours(false)
 			this.listenForHours(true)
@@ -240,7 +266,7 @@ export default class HomeScreen extends Component {
 
 
 	//Shows announcement first thing when one opens the app
-	componentDidMount(){
+	async componentDidMount(){
 		this.props.navigation.setParams({makeAnnouncementVisible: () => {
 			console.log('Make annoucnement visible called')
 			let announcementRef = firebaseDatabase.ref('Admin')
@@ -263,9 +289,9 @@ export default class HomeScreen extends Component {
 
 	    this.didFocusSubscription()
 		this.didBlurSubscription()
-		
 
-		
+		await this.registerForPushNotificationsAsync();
+
 	}
 
 	componentWillUnmount(){
@@ -355,13 +381,11 @@ export default class HomeScreen extends Component {
 					<ScrollView 
 					directionalLockEnabled={true} 
 					>
-					<TouchableWithoutFeedback>
-					<View style={{ flex: 1, justifyContent:'center', alignContent:'center', alignItems:'center'}} >
-						<View style={{flex:1, borderRadius:30, width : 500}} backgroundColor='white'>
-							<Image source={require('../assets/announcementPic.png')} style={{flex:1, resizeMode:'cover', width:500, height: 300, borderTopLeftRadius:30, borderTopRightRadius:30}}/>
-							<Text style={{flex:3, padding:10, alignSelf:'center'}}>{this.state.announcementMessage}</Text>
-						</View>
-					</View>					
+					<TouchableWithoutFeedback >
+						<View style={{flex:1, borderRadius:30, alignItems:'center'}} backgroundColor='white'>
+							<Image source={require('../assets/announcementPic.png')} resizeMode={'cover'}/>
+							<Text style={{flex:1, padding:10}}>{this.state.announcementMessage}</Text>
+						</View>					
 					</TouchableWithoutFeedback>
 					</ScrollView>
 				</TouchableOpacity> 

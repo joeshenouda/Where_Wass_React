@@ -14,7 +14,7 @@
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -25,6 +25,11 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package" : "com.tsdot.sheno.where_wass",
+      "versionCode" : 3,
+      "googleServicesFile": "./google-services.json"
     }
   }
 }

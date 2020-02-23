@@ -3,7 +3,6 @@ import { StyleSheet, Image, View, Button, TouchableOpacity } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
 import {Calendar} from 'react-native-calendars';
 import AdminPortalDay from '../components/AdminPortalDay';
-import DialogInput from 'react-native-dialog-input';
 
 
 
@@ -16,7 +15,6 @@ export default class AdminMonthly extends Component {
             selectedMonth : today.getMonth()+1,
             selectedDay : today.getDate(),
             selectedYear : today.getFullYear(),
-            isDialogVisible : false
         }
     }
 
@@ -85,40 +83,8 @@ export default class AdminMonthly extends Component {
             <View style={{flex:1}}>
                 <AdminPortalDay month = {this.state.selectedMonth} day={this.state.selectedDay} year={this.state.selectedYear}/>
             </View>
-            <DialogInput isDialogVisible={this.state.isDialogVisible}
-                title={"Update announcement"}
-                message={"Enter new announcement"}
-                hintInput ={"Shop closed"}
-                textInputProps={{autoCapitalize:'words'}}
-                submitInput = {(inputtext) => this.updateAnnouncement(inputtext)}
-                closeDialog = {() => this.setState({isDialogVisible:false})}>
-            </DialogInput>
-            <TouchableOpacity onPress={() => this.setState({isDialogVisible:true})} style={styles.fab}>
-                <Image source={require('../assets/hairDryer.png')} style={{padding: 10, height: 25, width: 25, resizeMode: 'cover'}}/>
-            </TouchableOpacity>
 
 	    </View>
 	);
     }
 }
-
-const styles = StyleSheet.create({
-
-	fab: { 
-		flex:1,
-		position: 'absolute', 
-		width: 56, 
-		height: 56, 
-		alignItems: 'center', 
-		justifyContent: 'center', 
-		right: 20, 
-		bottom: 220, 
-		backgroundColor: 'orange', 
-		borderRadius: 30, 
-		elevation: 10, 
-		}, 
-	fabIcon: { 
-		fontSize: 40, 
-		color: 'white' 
-	}
-  });

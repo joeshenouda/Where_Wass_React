@@ -4,10 +4,14 @@ import { StyleSheet,
          View,
          Switch,
          Modal,
-         Button
+         Button,
+         TouchableOpacity,
+         Image
          } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import firebase from '../config';
+import DialogInput from 'react-native-dialog-input';
+
 
 //Initializing the database object from firebase
 firebaseDatabase = firebase.database();
@@ -28,13 +32,25 @@ class AdminPortalDay extends Component{
       date : '',
       day: this.props.day,
       month : this.props.month,
-      year : this.props.year
+      year : this.props.year,
+      isDialogVisible : false
+
     }
     let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     this.monthlyHoursRef=firebaseDatabase.ref('business_hours/'+months[this.state.month-1]+'/'+this.state.day)
     console.log('Admin Portal day given was '+this.props.day)
   }
 
+  updateAnnouncement(newAnnouncement){
+		let announcementRef = firebaseDatabase.ref('Admin/')
+		announcementRef.update({
+			news: newAnnouncement
+		})
+		this.setState({
+			isDialogVisible:false
+		})
+  }
+  
   updateWorkingStatus(prevWorking){
       this.setState(prevState => ({
         working : !prevState.working,
@@ -188,9 +204,14 @@ class AdminPortalDay extends Component{
     return (
           <View style={styles.rect}>
             <Text style={styles.dayOfWeek}>{this.props.month}/{this.props.day}/{this.props.year}</Text>
-            <View style={{flexDirection:'row', marginBottom : 50, justifyContent:'center'}}>
+            <View style={{flex:1, flexDirection:'row', justifyContent:'space-between'}}>
               <Switch trackColor = {{false :'white', true: 'green'}} thumbColor = 'white' value= {this.state.working} onValueChange = {() => this.updateWorkingStatus(this.state.working)}/>
               <Text style ={{fontSize : 25, color:'white'}}>Working</Text>
+              <View style={{flex:1, flexDirection:'row', justifyContent:'center'}}>
+                <TouchableOpacity onPress={() => this.setState({isDialogVisible:true})} style={styles.fab}>
+                  <Image source={require('../assets/hairDryer.png')} style={{padding: 10, height: 25, width: 25, resizeMode: 'cover'}}/>
+                </TouchableOpacity>
+              </View>
             </View>
             <View style = {{flex : 1, flexDirection : 'row', marginHorizontal : 5}}>
               <Text style={styles.startTime}>Start Time:</Text>
@@ -247,6 +268,16 @@ class AdminPortalDay extends Component{
               </Modal>
             }
 
+            <DialogInput isDialogVisible={this.state.isDialogVisible}
+                title={"Update announcement"}
+                message={"Enter new announcement"}
+                hintInput ={"Shop closed"}
+                textInputProps={{autoCapitalize:'words'}}
+                submitInput = {(inputtext) => this.updateAnnouncement(inputtext)}
+                closeDialog = {() => this.setState({isDialogVisible:false})}>
+            </DialogInput>
+
+
           </View>
     )
   }
@@ -257,7 +288,8 @@ const styles = StyleSheet.create({
     rect: {
       flex : 1,
       justifyContent : 'center',
-      backgroundColor: "black"
+      backgroundColor: "black",
+      alignItems:'center'
     },
     dayOfWeek: {
         color: "white",
@@ -287,6 +319,19 @@ const styles = StyleSheet.create({
         marginTop: 11,
         marginLeft: 20
     },
+    fab: { 
+        flex:1,
+        height:56,
+        marginLeft:'75%',
+        alignItems:'center',
+        justifyContent: 'center',  
+        backgroundColor: 'orange', 
+        borderRadius: 30, 
+    }, 
+    fabIcon: { 
+        fontSize: 40, 
+        color: 'white' 
+    }
 
 })
 export default AdminPortalDay;

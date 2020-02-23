@@ -18,7 +18,6 @@ import WeeklyScheduleScreen from './screens/WeeklyScheduleScreen.component';
 import InformationScreen from './screens/InformationScreen.component';
 import AccountScreen from './screens/AccountScreen.component';
 import CreateAccountScreen from './screens/CreateAccount.component';
-import AdminPortalScreen from './screens/Admin.component';
 import WaitlistScreen from './screens/WaitlistScreen.component';
 import InStoreWaitlistScreen from './screens/InStoreWaitlist.component';
 import MonthlyScheduleScreen from './screens/MonthlyScheduleScreen.component';

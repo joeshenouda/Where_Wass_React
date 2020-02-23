@@ -2,7 +2,9 @@ import React, { Component  } from 'react';
 import { StyleSheet,
          Text, 
          View,
-         Switch
+         Switch,
+         Modal,
+         Button
          } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import firebase from '../config';
@@ -19,6 +21,8 @@ class AdminPortalDay extends Component{
       startTime : 'Loading...',
       working : true,
       mode: 'time',
+      //This is for handling the iOS time picker
+      timeSelected:new Date(),
       show: false,
       editingStart : true,
       date : '',
@@ -76,14 +80,14 @@ class AdminPortalDay extends Component{
     console.log('timeToUpdate is '+timeToUpdate)
     if(timeToUpdate == 'start_time'){ 
       this.setState({
-        show : false,
-        startTime : reconstructedTime
+        startTime : reconstructedTime,
+        timeSelected:time
       })
     }
     else{
       this.setState({
-        show : false,
-        endTime : reconstructedTime
+        endTime : reconstructedTime,
+        timeSelected:time
       })
  
     }
@@ -197,11 +201,50 @@ class AdminPortalDay extends Component{
                 <Text style={styles.startTime}>End Time:</Text>
                 <Text onPress = {this.timepickerEnd} style = {styles.timeText}>{this.state.endTime}</Text>
               </View>
-             { this.state.show && <DateTimePicker value= {new Date()}
+             { Platform.OS==='android' &&  this.state.show && <DateTimePicker value= {new Date()}
                     mode={this.state.mode}
                     is24Hour={false}
                     display="default"
                     onChange={this.setTime} />
+            }
+            {
+              Platform.OS==='ios' &&
+              <Modal 
+              animationType="slide"
+              visible={this.state.show} 
+              style={{backgroundColor:'white'}}
+              transparent={true}
+              presentationStyle="overFullScreen"
+              >
+                <View
+                  style={{
+                    flex: 1,
+                    backgroundColor: 'rgba(0,0,0,.2)',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <View
+                    style={{
+                      backgroundColor: 'white',
+                      padding: 20,
+                      borderRadius:30
+                    }}
+                  >
+                    <View>
+                    <DateTimePicker value= {this.state.timeSelected}
+                    mode="time"
+                    is24Hour={false}
+                    onChange={this.setTime}
+                    style={{width:'100%'}}
+                  />
+                    </View>
+                    <View style={{ alignItems: 'center' }}>
+                    <Button title="Done" onPress={()=>this.setState({show:false})}/>
+                    </View>
+                  </View>
+                </View>
+              </Modal>
             }
 
           </View>

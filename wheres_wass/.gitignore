@@ -12,6 +12,7 @@ web-report/
 
 # Contains firebase info
 config.js
+google-services.json
 
 # macOS
 .DS_Store

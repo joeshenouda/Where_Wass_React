@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Button,TextInput,StyleSheet, Alert, KeyboardAvoidingView } from 'react-native';
+import { View, Image, Button,TextInput,StyleSheet, Alert,Text, KeyboardAvoidingView } from 'react-native';
 //Because facebookAppID not the default export must be wrapped in curly
 import firebase from '../config';
 
@@ -79,15 +79,15 @@ class CreateAccountScreen extends Component {
     render(){
     return(
         
-            <KeyboardAvoidingView style={{flex:1, justifyContent:'space-between'}}
+            <KeyboardAvoidingView style={{flex:1}}
                 behavior = 'padding'>
                 <View style={style.container} backgroundColor='black'>
-                    <Image source={require('../assets/logo.png')} style={{width: null, height: null, flex: 1, resizeMode:'contain'}}/>
-                    <TextInput style={style.input}  placeholder = 'Enter Full Name' onChangeText = { (text) => this.setState({name : text}) } />	
-                    <TextInput style={style.input} autoCapitalize = 'none' placeholder = 'Enter Phone number' keyboardType = 'number-pad' onChangeText = { (text) => this.setState({phoneNumber : text}) } />	
-                    <TextInput style={style.input}  autoCapitalize = 'none' placeholder = 'Enter Email' onChangeText = { (text) => this.setState({email : text}) } />	
-                    <TextInput style={style.input}  autoCapitalize = 'none' placeholder = 'Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({password : text})} />
-                    <TextInput style={style.input}  autoCapitalize = 'none' placeholder = 'Re-Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({reenteredPS : text})} />
+                    <Text style={{fontSize:40, color:'white', alignSelf:'center'}}>Create Account</Text>
+                    <TextInput style={style.input}  placeholderTextColor='white' placeholder = 'Enter Full Name' onChangeText = { (text) => this.setState({name : text}) } />	
+                    <TextInput style={style.input}  placeholderTextColor='white' autoCapitalize = 'none' placeholder = 'Enter Phone number' keyboardType = 'number-pad' onChangeText = { (text) => this.setState({phoneNumber : text}) } />	
+                    <TextInput style={style.input}  placeholderTextColor='white' autoCapitalize = 'none' placeholder = 'Enter Email' onChangeText = { (text) => this.setState({email : text}) } />	
+                    <TextInput style={style.input}  placeholderTextColor='white' autoCapitalize = 'none' placeholder = 'Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({password : text})} />
+                    <TextInput style={style.input}  placeholderTextColor='white' autoCapitalize = 'none' placeholder = 'Re-Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({reenteredPS : text})} />
                     <Button style={style.button} color= 'orange' title = 'Create Account' onPress = {() => this._onPressCreate()}/>
                 </View>
             </KeyboardAvoidingView>
@@ -98,17 +98,15 @@ class CreateAccountScreen extends Component {
 }
 const style = StyleSheet.create({
     container: {
-        backgroundColor:'black',
         flex: 1,
-        justifyContent: 'flex-end',
-        paddingBottom:70,
+        justifyContent:'space-evenly'
       },
       input: {
+        fontSize: 20,
         backgroundColor: 'black',
-        margin:20,
         color: 'white',
         borderBottomWidth : 1,
-        borderBottomColor : 'white'
+        borderBottomColor:'white'
       },
       button: {
           alignSelf:'center'

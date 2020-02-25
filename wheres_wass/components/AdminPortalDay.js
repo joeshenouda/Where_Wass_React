@@ -94,17 +94,35 @@ class AdminPortalDay extends Component{
     
     //Setting the state according to which time was updated (start or end)
     console.log('timeToUpdate is '+timeToUpdate)
-    if(timeToUpdate == 'start_time'){ 
+    if(timeToUpdate == 'start_time'){
+      if(Platform.OS==='ios'){
       this.setState({
         startTime : reconstructedTime,
         timeSelected:time
       })
     }
+      else{
+        this.setState({
+          startTime : reconstructedTime,
+          timeSelected:time,
+          show:false
+        })
+      }
+    }
     else{
-      this.setState({
-        endTime : reconstructedTime,
-        timeSelected:time
-      })
+      if(Platform.OS==='ios'){
+        this.setState({
+          endTime : reconstructedTime,
+          timeSelected:time
+        })
+      }
+      else{
+        this.setState({
+          endTime : reconstructedTime,
+          timeSelected:time,
+          show:false
+        })
+      }
  
     }
 

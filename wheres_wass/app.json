@@ -20,6 +20,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
+    "notification":{
+      "icon": "./assets/logo.png"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],

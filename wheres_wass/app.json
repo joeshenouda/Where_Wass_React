@@ -21,7 +21,7 @@
       "fallbackToCacheTimeout": 0
     },
     "notification":{
-      "icon": "./assets/logo.png"
+      "icon": "./assets/logoNotification.png"
     },
     "assetBundlePatterns": [
       "**/*"

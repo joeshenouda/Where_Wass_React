@@ -147,7 +147,7 @@ export default class MonthlyScheduleScreen extends Component {
                 maxDate={this.twoMonthsLaterString}
                 minDate={this.today} 
                 hideArrows={false}
-                disableArrowLeft={true}
+                disableArrowLeft={false}
                 hideExtraDays={true}
                 disableMonthChange={false}
                 firstDay={7}

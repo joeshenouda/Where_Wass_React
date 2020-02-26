@@ -28,7 +28,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier":"com.lightspacecreative.Wadiesalon",
+      "buildNumber":"1.4.0"
     },
     "android": {
       "package" : "com.tsdot.sheno.where_wass",

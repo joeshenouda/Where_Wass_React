@@ -39,7 +39,7 @@ export default class HomeScreen extends Component {
 
 		if(firebase.auth().currentUser){
 			console.log('Adding to firebase databse expotoken')	
-			firebaseDatabase.ref('/expoTokens').child(firebase.auth().currentUser.uid).set({expoToken: token})
+			firebaseDatabase.ref('/expoTokens').child(firebase.auth().currentUser.uid).set({expoToken: token, name: currentUser.displayName, email:currentUser.email})
 		}
 	}
 	constructor(props){
@@ -338,6 +338,7 @@ export default class HomeScreen extends Component {
 	
     render(){
 		if(this.state.working == ''){
+			console.log('Working has not yet been updated')
 			return null
 		}
 		else{

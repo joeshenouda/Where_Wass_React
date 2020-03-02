@@ -5,7 +5,7 @@ import { FontAwesome  } from '@expo/vector-icons';
 import firebase from '../config';
 import Modal from 'react-native-modal';
 //For push notifications
-import { Notifications } from 'expo';
+import { Notifications, SplashScreen } from 'expo';
 import * as Permissions from 'expo-permissions';
 
 //Initializing the database object from firebase
@@ -45,7 +45,7 @@ export default class HomeScreen extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			working: 'ON',
+			working: '',
 			openingHour: 'Loading...',
 			closingHour: 'Loading...',
 			tomorrowWorking : 'OFF',
@@ -66,10 +66,11 @@ export default class HomeScreen extends Component {
 		this.business_hoursMonthlyRefTomorrow = firebaseDatabase.ref('business_hours/'+months[tomorrow.getMonth()]+'/'+tomorrow.getDate())
 
 		this.waitListRef = firebaseDatabase.ref('waitList');
+
+		SplashScreen.preventAutoHide()
 	}
 	//Called everytime a child changes on the database for the given day
 	listenForHours(isTomorrow) {
-		console.log('Listen for hours called')
 
 		let monthlyValExists = true
 		//First checks if we want TODAY's hours
@@ -77,7 +78,6 @@ export default class HomeScreen extends Component {
 			//This checks if the data exists in the monthly
 			this.business_hoursMonthlyRef.on('value', (snap) => {
 				if(snap.exists() && snap.child('start_time').exists() && snap.child('end_time').exists() && snap.child('working').exists()){
-					console.log('Monhtly EXISTS!!')
 					this.setState({
 						openingHour : snap.child('start_time').val(),
 						closingHour : snap.child('end_time').val(),
@@ -241,9 +241,11 @@ export default class HomeScreen extends Component {
 		)
 	}
 
-		didFocusSubscription() {
+	didFocusSubscription() {
 	    this.props.navigation.addListener('didFocus', () => {
+			//Setup listener for today's hours
 			this.listenForHours(false)
+			//Setup listener for tomorrow's hours
 			this.listenForHours(true)
 			this.listenForWaitlist(this.waitListRef)
 			this.listenForAdmin()
@@ -289,6 +291,8 @@ export default class HomeScreen extends Component {
 
 	    this.didFocusSubscription()
 		this.didBlurSubscription()
+		
+
 
 		await this.registerForPushNotificationsAsync();
 
@@ -333,6 +337,12 @@ export default class HomeScreen extends Component {
 	}
 	
     render(){
+		if(this.state.working == ''){
+			return null
+		}
+		else{
+			SplashScreen.hide()
+		}
 		//Determine whether working next day or not
 		var workingTomorrow = this.state.tomorrowWorking == 'OFF' ? <Text style = {Homestyles.tomorrowStatus}>Tomorrow we are closed</Text> :
 		<Text style = {Homestyles.tomorrowStatus}>Tomorrow: {this.state.tomorrowOpeningHour} to {this.state.tomorrowClosingHour}</Text> 
@@ -370,6 +380,7 @@ export default class HomeScreen extends Component {
 		//if ON render the workingLayout with appropriate startTime and endTime
 		//else render the nonworkingLayout
 		(this.state.working === 'ON') ? status = workingLayout() : status = notWorkingLayout()
+
 
 		return(
 			<ImageBackground source={require('../assets/barberbackground.jpg')} 

@@ -39,7 +39,7 @@ export default class HomeScreen extends Component {
 
 		if(firebase.auth().currentUser){
 			console.log('Adding to firebase databse expotoken')	
-			firebaseDatabase.ref('/expoTokens').child(firebase.auth().currentUser.uid).set({expoToken: token, name: currentUser.displayName, email:currentUser.email})
+			firebaseDatabase.ref('/expoTokens').child(firebase.auth().currentUser.uid).set({expoToken: token, name: firebase.auth().currentUser.displayName, email:firebase.auth().currentUser.email})
 		}
 	}
 	constructor(props){

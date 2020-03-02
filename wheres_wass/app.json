@@ -22,7 +22,8 @@
     },
     "notification":{
       "icon": "./assets/logoNotification.png",
-      "color": "#ffffff"
+      "color": "#ffffff",
+      "iosDisplayInForeground": true
     },
     "assetBundlePatterns": [
       "**/*"
@@ -30,7 +31,8 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier":"com.lightspacecreative.Wadiesalon",
-      "buildNumber":"1.4.0"
+      "buildNumber":"1.4.0",
+
     },
     "android": {
       "package" : "com.tsdot.sheno.where_wass",

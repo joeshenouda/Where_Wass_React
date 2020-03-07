@@ -20,7 +20,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "notification":{
+    "notification": {
       "icon": "./assets/logoNotification.png",
       "color": "#ffffff"
     },
@@ -29,13 +29,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier":"com.lightspacecreative.Wadiesalon",
-      "buildNumber":"1.4.0"
+      "bundleIdentifier": "com.lightspacecreative.Wadiesalon",
+      "buildNumber": "1.4.0"
     },
     "android": {
-      "package" : "com.tsdot.sheno.where_wass",
-      "versionCode" : 4,
+      "package": "com.tsdot.sheno.where_wass",
+      "versionCode": 4,
       "googleServicesFile": "./google-services.json"
-    }
+    },
+    "description": ""
   }
 }

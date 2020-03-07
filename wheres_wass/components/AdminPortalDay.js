@@ -290,7 +290,6 @@ class AdminPortalDay extends Component{
                 title={"Update announcement"}
                 message={"Enter new announcement"}
                 hintInput ={"Shop closed"}
-                textInputProps={{autoCapitalize:'words'}}
                 submitInput = {(inputtext) => this.updateAnnouncement(inputtext)}
                 closeDialog = {() => this.setState({isDialogVisible:false})}>
             </DialogInput>

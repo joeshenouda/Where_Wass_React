@@ -345,7 +345,7 @@ export default class HomeScreen extends Component {
 			SplashScreen.hide()
 		}
 		//Determine whether working next day or not
-		var workingTomorrow = this.state.tomorrowWorking == 'OFF' ? <Text style = {Homestyles.tomorrowStatus}>Tomorrow we are closed</Text> :
+		var workingTomorrow = this.state.tomorrowWorking == 'OFF' ? <Text style = {Homestyles.tomorrowStatus}>Tomorrow I am off</Text> :
 		<Text style = {Homestyles.tomorrowStatus}>Tomorrow: {this.state.tomorrowOpeningHour} to {this.state.tomorrowClosingHour}</Text> 
 
 		//Two layouts for switching b/t working and non working layouts

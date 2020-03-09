@@ -62,14 +62,15 @@ class AdminPortalDay extends Component{
   }
 
   setTime = (event, time) => {
-    console.log(time)
     //Convert Date object to string
     const stringTime = time.toLocaleTimeString('en-US')
     const decomposedTime = stringTime.split(':')
 
     let hour = decomposedTime[0]
     let minute = decomposedTime[1]
-    let AMorPM = 'AM'
+    //This only becomes the string "AM" or "PM" in the case of an iPhone for android we need to decide
+    //based on the 24 hr clock
+    let AMorPM = stringTime[stringTime.length-2]+stringTime[stringTime.length-1]
 
     if (hour[0] == '0'){
       hour = hour[1]
@@ -84,7 +85,10 @@ class AdminPortalDay extends Component{
       }else{
         hour = hour % 12
       }
-      AMorPM = 'PM'
+      //Only make it PM for android case
+      if(AMorPM != 'PM' && AMorPM != 'AM'){
+        AMorPM = 'PM'
+      }
     }
 
     const reconstructedTime = hour+':'+minute+' '+AMorPM;
@@ -265,7 +269,7 @@ class AdminPortalDay extends Component{
                 >
                   <View
                     style={{
-                      backgroundColor: 'white',
+                      backgroundColor: 'gray',
                       padding: 20,
                       borderRadius:30
                     }}

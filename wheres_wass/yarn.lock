@@ -5625,10 +5625,9 @@ react-native-checkbox@^2.0.0:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-dialog-input@^1.0.7:
+"react-native-dialog-input@git+https://github.com/jshen99/react-native-dialog-input.git":
   version "1.0.7"
-  resolved "https://registry.yarnpkg.com/react-native-dialog-input/-/react-native-dialog-input-1.0.7.tgz#b2fefb4193d1784b3ae78c4a18d8fd6759466009"
-  integrity sha512-boi++dT2tzV8eCZud5Qe3LY/cdTGfgf93Vy4MFxq3O/4rBehllwCfBn5fhWMuf3JcVlzrk0fBsv/Ny766BiyVA==
+  resolved "git+https://github.com/jshen99/react-native-dialog-input.git#1af1db6c5b9686c274815af6e2b1407e1394b856"
 
 react-native-elements@^1.2.7:
   version "1.2.7"

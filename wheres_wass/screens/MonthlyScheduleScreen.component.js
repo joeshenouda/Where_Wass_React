@@ -93,7 +93,7 @@ export default class MonthlyScheduleScreen extends Component {
                 this.setState({
                     start_time : 'Time not yet set',
                     end_time : 'Time not yet set',
-                    working:true,
+                    working:false,
                     selectedDay : day.day,
                     selectedMonth : day.month,
                     selectedYear : day.year,

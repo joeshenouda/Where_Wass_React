@@ -350,17 +350,29 @@ export default class HomeScreen extends Component {
 
 		//Two layouts for switching b/t working and non working layouts
 		const workingLayout = () => {
-			var waitlistButton = this.state.joinedWaitList ? <TouchableOpacity style={{alignItems:'center', backgroundColor:'red', padding:15, borderRadius:30}} onPress = {() => this.removeFromWaitList()}>
-																<Text style={{color:'white', fontSize:15}}>Leave Waitlist</Text> 
-															</TouchableOpacity> : 
-														<TouchableOpacity style={{alignItems:'center', backgroundColor:'orange', padding:15, borderRadius:30}} activeOpacity={0.3} onPress = {() => this.addToWaitList()}>
-															<Text style={{color:'white', fontSize:15,fontWeight:'bold'}}>Join Waitlist</Text>
-														</TouchableOpacity>
+			var waitlistText = <Text style = {{color: 'orange', justifyContent: 'center', fontSize : 20, marginBottom : 10}}>
+									{this.state.queueLength} clients ahead of you
+								</Text>
+			
+			var waitlistComponent = this.state.joinedWaitList ? <View>
+																{waitlistText}
+																<TouchableOpacity style={{alignItems:'center', backgroundColor:'red', padding:15, borderRadius:30}} onPress = {() => this.removeFromWaitList()}>
+																	<Text style={{color:'white', fontSize:15}}>Leave Waitlist</Text> 
+																</TouchableOpacity> 
+															</View>: 
+															<View>
+																{waitlistText}
+																<TouchableOpacity style={{alignItems:'center', backgroundColor:'orange', padding:15, borderRadius:30}} activeOpacity={0.3} onPress = {() => this.addToWaitList()}>
+																	<Text style={{color:'white', fontSize:15,fontWeight:'bold'}}>Join Waitlist</Text>
+																</TouchableOpacity>
+															</View>
+
+														
 
 			return(
 				<View style = {Homestyles.statusBox}>
-					<Text style = {{color: 'orange', justifyContent: 'center', fontSize : 20, marginBottom : 10}}> {this.state.queueLength} clients ahead of you</Text>
-					{waitlistButton}
+					{this.state.waitlistOn && waitlistComponent}
+					{!this.state.waitlistOn && <Text style={{fontSize:20, color:'orange'}}>Waitlist currently disabled</Text>}
 					<Text style = {Homestyles.statusText}>{this.state.openingHour}</Text>
 					<Text style = {{fontSize:20, color: 'gray'}}>to</Text>
 					<Text style = {Homestyles.statusText}>{this.state.closingHour}</Text>

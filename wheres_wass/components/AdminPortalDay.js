@@ -42,14 +42,45 @@ class AdminPortalDay extends Component{
   }
 
   updateAnnouncement(newAnnouncement){
-		let announcementRef = firebaseDatabase.ref('Admin/')
-		announcementRef.update({
-			news: newAnnouncement
-		})
+    let announcementRef = firebaseDatabase.ref('Admin/')
+    
+   //Completion callback added to ensure that notify is set to false before we update the actual annoucnemnet
+   announcementRef.update({
+      notify : "False"
+    }, 
+    (error) => {
+      if (!error){
+        announcementRef.update({
+          news : newAnnouncement
+        })
+      }
+    })
 		this.setState({
 			isDialogVisible:false
 		})
   }
+
+  updateWithPush(newAnnouncement){
+    let announcementRef = firebaseDatabase.ref('Admin/')
+
+    //Completion callback added to ensure that notify is set to true before we update the actual annoucnemnet
+    announcementRef.update({
+      notify : "True"
+    }, 
+    (error) => {
+      if (!error){
+        announcementRef.update({
+          news : newAnnouncement
+        })
+      }
+    })
+
+		this.setState({
+			isDialogVisible:false
+		})
+  }
+
+
   
   updateWorkingStatus(prevWorking){
       this.setState(prevState => ({
@@ -295,6 +326,8 @@ class AdminPortalDay extends Component{
                 message={"Enter new announcement"}
                 hintInput ={"Shop closed"}
                 submitInput = {(inputtext) => this.updateAnnouncement(inputtext)}
+                thirdButtonText = 'Send Notification'
+                submitThirdButton = {(inputtext) => this.updateWithPush(inputtext)}
                 closeDialog = {() => this.setState({isDialogVisible:false})}>
             </DialogInput>
 

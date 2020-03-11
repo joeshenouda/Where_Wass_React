@@ -172,7 +172,7 @@ export default class HomeScreen extends Component {
 				//Immediateyl unsubscribe the onAuthStateChanged because we override it again in AccountScreen
 				unsubscribe();
 				this.setState({user : currentUser})
-				if (currentUser != null && (currentUser.uid =='wxvpFDGbWlQSVLtWiXepnkShU6D3'|| currentUser.uid == 'Fl410iXYnfM19EZODAY4mWKmehW2')){
+				if (currentUser != null && (currentUser.uid == 'dv09dCqF9lNHrnpJePjpG9B7hPP2' || currentUser.uid =='wxvpFDGbWlQSVLtWiXepnkShU6D3'|| currentUser.uid == 'Fl410iXYnfM19EZODAY4mWKmehW2')){
 					this.props.navigation.setParams({'admin': 'true'})
 				}
 				else{

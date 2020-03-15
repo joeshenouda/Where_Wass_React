@@ -3,28 +3,41 @@
     "name": "Where's Wass",
     "slug": "wheres_wass",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
+    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.0.0",
+    "version": "1.4.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
+    "notification": {
+      "icon": "./assets/logoNotification.png",
+      "color": "#ffffff",
+      "iosDisplayInForeground": true
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
-    }
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lightspacecreative.Wadiesalon",
+      "buildNumber": "1.4.0"
+    },
+    "android": {
+      "package": "com.tsdot.sheno.where_wass",
+      "versionCode": 5,
+      "googleServicesFile": "./google-services.json"
+    },
+    "description": ""
   }
 }

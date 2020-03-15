@@ -84,6 +84,11 @@ export default class HomeScreen extends Component {
 						working : snap.child('working').val()
 					})
 				}
+				else if(snap.exists() && snap.child('working').exists()){
+					this.setState({
+						working : snap.child('working').val()
+					})
+				}
 			})
 				
 			

@@ -52,14 +52,7 @@ exports.sendPushNotification = functions.database.ref('/Admin/news').onUpdate(as
               }
             }
           })();
-        // fetch('https://exp.host/--/api/v2/push/send', {
-        //     method: "POST",
-        //     headers: {
-        //         "Accept": "application/json",
-        //         "Content_Type": "application/json"
-        //     },
-        //     body: JSON.stringify(messages_1)
-        // }).then(res => console.log(res));
+
     }
 }
     

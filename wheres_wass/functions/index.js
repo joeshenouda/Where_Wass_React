@@ -3,13 +3,12 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const fetch = require("node-fetch");
 const { Expo } = require('expo-server-sdk')
-
+let expo = new Expo()
 admin.initializeApp();
 
 
 exports.sendPushNotification = functions.database.ref('/Admin/news').onUpdate(async (change, context) => {
 
-    let expo = new Expo()
 
     //Checks if notify is set to true first
     notify = true
@@ -40,7 +39,7 @@ exports.sendPushNotification = functions.database.ref('/Admin/news').onUpdate(as
         console.log('About to send message');
 
 
-        let chunks = expo.chunkPushNotifications(messages_1)
+        let chunks = expo.chunkPushNotifications(messages_1);
 
         //Pushes the notification out in chunks so as not overload servers
         (async () => {

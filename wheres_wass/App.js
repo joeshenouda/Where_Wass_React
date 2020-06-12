@@ -14,7 +14,6 @@ import { createStackNavigator  } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { FontAwesome } from '@expo/vector-icons';
 import HomeScreen from './screens/HomeScreen.component';
-import WeeklyScheduleScreen from './screens/WeeklyScheduleScreen.component';
 import InformationScreen from './screens/InformationScreen.component';
 import AccountScreen from './screens/AccountScreen.component';
 import CreateAccountScreen from './screens/CreateAccount.component';
@@ -22,6 +21,7 @@ import WaitlistScreen from './screens/WaitlistScreen.component';
 import InStoreWaitlistScreen from './screens/InStoreWaitlist.component';
 import MonthlyScheduleScreen from './screens/MonthlyScheduleScreen.component';
 import AdminMonthlyScreen from './screens/AdminMonthly.component';
+import ClientListScreen from './screens/ClientListScreen.component';
 
 
 const headerConfigs = { 
@@ -63,7 +63,8 @@ const AdminPortalTabs = createBottomTabNavigator(
     {
         'Admin Portal' : AdminMonthlyScreen,
         Waitlist : WaitlistScreen,
-        InStoreWaitlist : InStoreWaitlistStack
+        InStoreWaitlist : InStoreWaitlistStack,
+        Clients: ClientListScreen
     },
 )
 

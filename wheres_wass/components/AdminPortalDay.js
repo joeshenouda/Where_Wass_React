@@ -10,7 +10,7 @@ import { StyleSheet,
          } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import firebase from '../config';
-import DialogInput from 'react-native-dialog-input';
+import DialogInput from '../components/DialogInput';
 
 
 //Initializing the database object from firebase
@@ -20,6 +20,7 @@ firebaseDatabase = firebase.database();
 class AdminPortalDay extends Component{
   constructor(props){
     super(props);
+
     this.state = {
       endTime : 'Loading...',
       startTime : 'Loading...',
@@ -44,20 +45,20 @@ class AdminPortalDay extends Component{
   updateAnnouncement(newAnnouncement){
     let announcementRef = firebaseDatabase.ref('Admin/')
     
-   //Completion callback added to ensure that notify is set to false before we update the actual annoucnemnet
-   announcementRef.update({
+    //Completion callback added to ensure that notify is set to false before we update the actual annoucnemnet
+    announcementRef.update({
       notify : "False"
-    }, 
-    (error) => {
+     }, 
+     (error) => {
       if (!error){
         announcementRef.update({
           news : newAnnouncement
         })
       }
-    })
-		this.setState({
-			isDialogVisible:false
-		})
+     })
+		 this.setState({
+		  	isDialogVisible:false
+		 })
   }
 
   updateWithPush(newAnnouncement){
@@ -325,6 +326,7 @@ class AdminPortalDay extends Component{
                 title={"Update announcement"}
                 message={"Enter new announcement"}
                 hintInput ={"Shop closed"}
+                dialogStyle = {{marginBottom:300}}
                 submitInput = {(inputtext) => this.updateAnnouncement(inputtext)}
                 thirdButtonText = 'Send Notification'
                 submitThirdButton = {(inputtext) => this.updateWithPush(inputtext)}

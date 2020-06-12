@@ -10,7 +10,7 @@ import { StyleSheet,
          } from 'react-native';
 import firebase from '../config';
 import Waitlist from './WaitlistScreen.component';
-import DialogInput from 'react-native-dialog-input';
+import DialogInput from '../components/DialogInput';
 import inStoreStyles from '../styles/inStoreStyles';
 
 firebaseDatabase = firebase.database();

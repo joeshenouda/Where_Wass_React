@@ -2,13 +2,14 @@ import React, { Component  } from 'react';
 import { StyleSheet,
          Text, 
          View,
-         ScrollView,
+         Alert,
          FlatList,
          SafeAreaView,
          Switch,
-         TouchableOpacity
+         TouchableOpacity,
+         Linking,
+         Button
          } from 'react-native';
-import AdminPortalDay from '../components/AdminPortalDay';
 import { FontAwesome  } from '@expo/vector-icons';
 import firebase from '../config'
 
@@ -36,17 +37,34 @@ class WaitlistScreen extends Component{
     }
 
     Person({client}) {
-        
+
         return (
             <TouchableOpacity  
-            onPress = {() => firebaseDatabase.ref('waitList/'+client.id).remove().then( () => console.log('Successfully removed '+client.id) )}>
+            onLongPress = {() => {
+                Alert.alert(
+                    'Remove User',
+                    'Are you sure you want to remove this client from the waitlist?',
+                    [
+                    {text: 'Yes', onPress: () => firebaseDatabase.ref('waitList/'+client.id).remove().then( () => {
+                        console.log('Successfully removed '+client.id) 
+                    })},
+                    {text: 'Cancel'}
+                    ],
+                    {cancelable: true},
+                )
+                
+            }}>
                 <View style={{flex : 1,flexDirection:'row',justifyContent: 'space-between', padding : 20}}>
+                    <TouchableOpacity  onPress={()=>Linking.openURL(`tel:${client.phone}`)}>
+                            <FontAwesome name="phone" size={25}/>
+                    </TouchableOpacity>
                     <Text style = {{fontSize: 25}}>{client.name}</Text>
                     <Text style = {{fontSize : 20}}>{Math.round((((new Date() - Date.parse(client.time))%86400000) % 3600000)/60000)}m</Text>
                 </View>
             </TouchableOpacity>
         )
     }
+
     PersonStatic({client}) {
         
         return (
@@ -86,7 +104,8 @@ class WaitlistScreen extends Component{
                     {
                         name : identifier,
                         id : snap.key,
-                        time : snap.val().time
+                        time : snap.val().time,
+                        phone : snap.val().phone
                     }
                     
                 )
@@ -99,6 +118,7 @@ class WaitlistScreen extends Component{
             }))
         })
     }
+
 
     componentDidMount(){
         console.log('Called componentDidMount for waitlistScreen')

@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Button, ImageBackground, Image, Alert,ScrollVie
 import { FontAwesome  } from '@expo/vector-icons';
 import firebase from '../config';
 import Modal from 'react-native-modal';
+import DialogInput from '../components/DialogInput';
 //For push notifications
 import { Notifications, SplashScreen } from 'expo';
 import * as Permissions from 'expo-permissions';
@@ -51,13 +52,20 @@ export default class HomeScreen extends Component {
 			tomorrowWorking : 'OFF',
 			tomorrowOpeningHour : 'Loading...',
 			tomorrowClosingHour : 'Loading...',
+
 			queueLength : 0,
 			joinedWaitList : false,
 			clientsInWait : [],
 			waitlistOn : true,
 			currUserSnapKey : '',
+
 			announcementVisible : false,
-			announcementMessage : ''
+			announcementMessage : '',
+
+			// hasDisplayName:false,
+			// hasPhoneNumber:false,
+			isInputvisible : false,
+			message : ''
 		},
 		this.business_hoursMonthlyRef = firebaseDatabase.ref('business_hours/'+months[today.getMonth()]+'/'+today.getDate())
 
@@ -190,9 +198,10 @@ export default class HomeScreen extends Component {
 
 	//Function to add user to waitlist
 	addToWaitList = () => {
+		//First get current user
 		let user = firebase.auth().currentUser;
+
 		let waitlist = this.state.waitlistOn
-		console.log('The value of waitlist is '+waitlist);
 		if (user == null){
 			// Works on both Android and iOS
 			Alert.alert(
@@ -214,6 +223,7 @@ export default class HomeScreen extends Component {
 				{cancelable: false},
 			);
 		}
+
 		else if (!waitlist){
 		    Alert.alert(
 			    //Alert
@@ -230,9 +240,27 @@ export default class HomeScreen extends Component {
 
 		}
 		else{
-			let dateNow = new Date()
-			firebaseDatabase.ref('waitList').push({uid : user.uid, name : user.displayName, email : user.email, time : dateNow.toString()})
-		}
+			let displayName = user.displayName
+			if(displayName == null){
+				this.setState({isInputvisible : true, message:'name'})
+			}
+
+			firebaseDatabase.ref('/wadies').child(user.uid).once('value', (snap) => {
+				let user_phoneNum=false
+				console.log(snap.val().phone)
+				if (snap.val().phone && snap.val().phone != ""){
+					console.log(snap.val().phone)
+					user_phoneNum=true
+					
+					//Add to waitlist
+					let dateNow = new Date()
+					firebaseDatabase.ref('waitList').push({uid : user.uid, name : user.displayName, email : user.email, time : dateNow.toString(), phone : snap.val().phone})
+				}
+				else{
+					this.setState({isInputvisible : true, message : 'phone'})
+				}
+			})
+		}	
 	}
 
 	//Function to remove user from waitlist
@@ -244,6 +272,47 @@ export default class HomeScreen extends Component {
 		firebaseDatabase.ref('waitList/'+parentPushRef).remove().then(
 			() => console.log('Successfully removed ' + firebase.auth().currentUser.uid+ ' from waitlist')
 		)
+	}
+
+	//Update user when they enter a name or phone number after first time joining waitlist
+	updateUser = (inputText) => {
+		console.log('Input text is',inputText)
+		let user = firebase.auth().currentUser
+		if(this.state.message == 'phone'){
+			if(/\(\d{3}\) \d{3}-\d{4}/.test(inputText)){
+				console.log('Phone set', inputText)
+				firebaseDatabase.ref('/wadies').child(user.uid).update({phone : inputText})
+				.then(() => {
+					this.addToWaitList()
+					this.setState({isInputvisible:false})
+				})
+			}else{
+				Alert.alert(
+					//Alert
+					'Sorry',
+					//Alert message
+					'Please enter a valid phone number',
+					[
+						{
+						text: 'Try Again',
+						},
+					],
+					{cancelable: false},
+				);
+			}
+		}
+		else if(this.state.message == 'name'){
+			console.log('Name set')
+			user.updateProfile({
+				displayName : inputText
+			}).then(() => {
+				firebaseDatabase.ref('/wadies').child(user.uid).update({
+				username : inputText
+			}).then(() => {
+				this.addToWaitList()
+				this.setState({isInputvisible:false})
+			})})
+		}
 	}
 
 	didFocusSubscription() {
@@ -378,6 +447,15 @@ export default class HomeScreen extends Component {
 				<View style = {Homestyles.statusBox}>
 					{this.state.waitlistOn && waitlistComponent}
 					{!this.state.waitlistOn && <Text style={{fontSize:20, color:'orange'}}>Waitlist currently disabled</Text>}
+					<DialogInput isDialogVisible={this.state.isInputvisible}
+						title={"Update user profile"}
+						//initValueTextInput = {'.'}
+                        message={this.state.message == 'phone' ? 'Please enter your phone number to be added to waitlist' : 'Please enter your name to be added to waitlist'}
+                        hintInput ={this.state.message == 'phone' ? 'Phone Number' : 'John Doe'}
+                        textInputProps={this.state.message=='phone' ? {keyboardType:'phone-pad',maxLength:14,autoCapitalize:'none',autoCorrect:false}:{keyboardType:'default'}}
+                        submitInput = {this.updateUser}
+                        closeDialog = {() => this.setState({isInputvisible : false})}>
+                    </DialogInput>
 					<Text style = {Homestyles.statusText}>{this.state.openingHour}</Text>
 					<Text style = {{fontSize:20, color: 'gray'}}>to</Text>
 					<Text style = {Homestyles.statusText}>{this.state.closingHour}</Text>

@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, Alert, Image, KeyboardAvoidingView } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, Alert, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import firebase,{facebookAppID} from '../config';
 import * as Facebook from 'expo-facebook';
 import { FontAwesome } from '@expo/vector-icons';
@@ -61,7 +61,14 @@ class Account extends Component{
 				const credential = firebase.auth.FacebookAuthProvider.credential(token);
 		
 				//Sign in with credential from the facebook user
-				firebase.auth().signInWithCredential(credential).then(
+				firebase.auth().signInWithCredential(credential).then(() => {
+					let user = firebase.auth().currentUser
+					//Update wadies node with new user
+					user.providerData.forEach((profile) => {
+						let email = profile.email
+						let name  = profile.displayName
+						firebase.database().ref('wadies').child(user.uid).update({email: email, username: name});
+					})
 					Alert.alert(
 						'Facebook Login',
 						'Login Successful!',
@@ -70,7 +77,7 @@ class Account extends Component{
 						],
 						{cancelable: false},
 					)
-				).catch((error) =>{
+					}).catch((error) =>{
 					Alert.alert(
 						'Facebook Login',
 						'Login to firebase failed'+error.message,
@@ -96,6 +103,19 @@ class Account extends Component{
 	}
 	didFocusSubscription() {
 	    this.props.navigation.addListener('didFocus', () => {
+			var user = firebase.auth().currentUser;
+
+			if (user != null) {
+			user.providerData.forEach(function (profile) {
+				console.log("Sign-in provider: " + profile.providerId);
+				console.log("  Provider-specific UID: " + profile.uid);
+				console.log("  Name: " + profile.displayName);
+				console.log("  Email: " + profile.email);
+				console.log("  Photo URL: " + profile.photoURL);
+			});
+
+			console.log("My display name is "+ user.displayName)
+			}
 			const unsub = firebase.auth().onAuthStateChanged((currentUser) => {
 				//First checks that we are on the Account screen
 				if(this.props.navigation.state.routeName == 'Account'){
@@ -147,14 +167,14 @@ class Account extends Component{
 		}
 		else{
 			return(
-			<KeyboardAvoidingView behavior='padding' style={{flex:1, justifyContent:'space-between'}}>
+			<KeyboardAvoidingView behavior={Platform.OS == 'ios'?'padding':'height'} style={{flex:1, justifyContent:'space-between'}}>
 				<View style = {accountStyles.container}>
 					<Image source={require('../assets/logo.png')} style = {{width:'50%', height:'50%', alignSelf:'center', bottom:'-10%'}}></Image>
 					<Text style = {accountStyles.textStyle}>Welcome to Where's Wass!</Text>
 					<TextInput style = {accountStyles.textinput} autoCapitalize = 'none' placeholderTextColor='white' placeholder = 'Enter Email' onChangeText = { (text) => this.setState({email : text}) } />	
 					<TextInput style = {accountStyles.textinput} autoCapitalize = 'none' placeholderTextColor='white' placeholder = 'Enter Password' secureTextEntry = {true} onChangeText = {(text) => this.setState({password : text})} />
 					<View style={{margin:10}}>
-						<Button style = {accountStyles.buttons} color ='orange' title = 'Submit Email Log In' onPress = {() => this.loginWithEmail()}/>
+						<Button style = {accountStyles.buttons} color ='orange' title = 'Submit' onPress = {() => this.loginWithEmail()}/>
 						<SocialIcon style = {accountStyles.buttons} title= 'Sign in with Facebook' button type="facebook" onPress = {() => this.loginWithFacebook()}/>
 						<Button style = {accountStyles.buttons} color ='orange' title = 'Create account with Email' onPress = {() => this.props.navigation.navigate('CreateAccount')} />
 					</View>
@@ -164,6 +184,7 @@ class Account extends Component{
 		}
     }
 }
+
 
 
 export default Account;

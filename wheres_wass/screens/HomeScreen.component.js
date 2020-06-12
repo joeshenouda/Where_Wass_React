@@ -445,8 +445,8 @@ export default class HomeScreen extends Component {
 
 			return(
 				<View style = {Homestyles.statusBox}>
-					{this.state.waitlistOn && waitlistComponent}
-					{!this.state.waitlistOn && <Text style={{fontSize:20, color:'orange'}}>Waitlist currently disabled</Text>}
+					{(this.state.waitlistOn || this.state.joinedWaitList) && waitlistComponent}
+					{(!this.state.waitlistOn && !this.state.joinedWaitList) && <Text style={{fontSize:20, color:'orange'}}>Waitlist currently disabled</Text>}
 					<DialogInput isDialogVisible={this.state.isInputvisible}
 						title={"Update user profile"}
 						//initValueTextInput = {'.'}

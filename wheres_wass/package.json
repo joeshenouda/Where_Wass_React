@@ -11,6 +11,8 @@
     "@react-native-community/datetimepicker": "^2.1.0",
     "expo": "^36.0.0",
     "expo-facebook": "~8.0.0",
+    "expo-google-app-auth": "^8.1.0",
+    "expo-google-sign-in": "^8.1.0",
     "firebase": "^7.4.0",
     "google-maps-react": "^2.0.2",
     "lodash": "^4.17.15",

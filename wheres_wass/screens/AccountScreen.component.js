@@ -5,6 +5,8 @@ import * as Facebook from 'expo-facebook';
 import { FontAwesome } from '@expo/vector-icons';
 import accountStyles from '../styles/AccountStyles';
 import { SocialIcon } from 'react-native-elements';
+import * as GoogleSignIn from 'expo-google-sign-in';
+import auth from 'firebase';
 
 class Account extends Component{
     constructor(props){
@@ -126,6 +128,51 @@ class Account extends Component{
 		this.didFocusSubscription()
 		this.didBlurSubscription()
 	}
+
+	componentDidMount(){
+		this.initAsync();
+	}
+
+	initAsync = async () => {
+		await GoogleSignIn.initAsync({
+			clientId: '437034514658-52dmhl7sumanpk1boi9n1eki86f9on27.apps.googleusercontent.com',
+		});
+		this._syncUserWithStateAsync();
+	};
+
+	_syncUserWithStateAsync = async () => {
+		const user = await GoogleSignIn.signInSilentlyAsync();
+		this.setState({ user });
+	};
+
+	signOutAsync = async () => {
+		await GoogleSignIn.signOutAsync();
+		this.setState({user:null});
+	};
+
+	signInAsync = async () => {
+		try{
+			await GoogleSignIn.askForPlayServicesAsync();
+			const { type, user } = await GoogleSignIn.signInAsync();
+			if (type === 'success') {
+				this._syncUserWithStateAsync();
+			}
+		} catch ({ message }) {
+			alert('login: Error:' + message);
+		}
+	};
+
+	onPress = () => {
+		if (this.state.user) {
+			this.signOutAsync();
+		} else {
+			this.signInAsync();
+		}
+	};
+
+	render() {
+		return <Text onPress={this.onPress}>Toggle Auth</Text>;
+	}
 	
     render(){
 		if (this.state.user != null){
@@ -147,7 +194,7 @@ class Account extends Component{
 		}
 		else{
 			return(
-			<KeyboardAvoidingView behavior='padding' style={{flex:1, justifyContent:'space-between'}}>
+			<KeyboardAvoidingView behavior='height' style={{flex:1, justifyContent:'space-between'}}>
 				<View style = {accountStyles.container}>
 					<Image source={require('../assets/logo.png')} style = {{width:'50%', height:'50%', alignSelf:'center', bottom:'-10%'}}></Image>
 					<Text style = {accountStyles.textStyle}>Welcome to Where's Wass!</Text>
@@ -156,6 +203,7 @@ class Account extends Component{
 					<View style={{margin:10}}>
 						<Button style = {accountStyles.buttons} color ='orange' title = 'Submit Email Log In' onPress = {() => this.loginWithEmail()}/>
 						<SocialIcon style = {accountStyles.buttons} title= 'Sign in with Facebook' button type="facebook" onPress = {() => this.loginWithFacebook()}/>
+						<SocialIcon style = {accountStyles.buttons} title= 'Sign in with Google' button type="google" onPress = {() => this.onPress()}/>
 						<Button style = {accountStyles.buttons} color ='orange' title = 'Create account with Email' onPress = {() => this.props.navigation.navigate('CreateAccount')} />
 					</View>
 				</View>

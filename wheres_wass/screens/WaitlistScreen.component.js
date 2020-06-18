@@ -55,7 +55,7 @@ class WaitlistScreen extends Component{
                 
             }}>
                 <View style={{flex : 1,flexDirection:'row',justifyContent: 'space-between', padding : 20}}>
-                    <TouchableOpacity  onPress={()=>Linking.openURL(`tel:${client.phone}`)}>
+                    <TouchableOpacity  style={{width:35,borderRadius:50,justifyContent:'center',alignItems:'center', backgroundColor:'#D3D3D3'}} activeOpacity = {0.1} onPress={()=>Linking.openURL(`tel:${client.phone}`)}>
                             <FontAwesome name="phone" size={25}/>
                     </TouchableOpacity>
                     <Text style = {{fontSize: 25}}>{client.name}</Text>
@@ -135,7 +135,7 @@ class WaitlistScreen extends Component{
             return(
                 <View style={{flex:1}}>
                     <View style={{flexDirection : 'row', alignSelf:'center'}}>
-                    <Switch trackColor = {{false :'white', true: 'green'}} thumbColor = 'white' value= {this.state.waitlistOn} onValueChange = {(newVal) => {
+                    <Switch trackColor = {{false :'gray', true: 'green'}} thumbColor = 'white' value= {this.state.waitlistOn} onValueChange = {(newVal) => {
                             if(newVal){
                                 firebaseDatabase.ref('/Admin').child('waitlist').set('ON')
                             }

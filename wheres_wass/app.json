@@ -31,11 +31,6 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.lightspacecreative.Wadiesalon",
-      "config": {
-        "googleSignIn": {
-          "reservedClientId": "437034514658-52dmhl7sumanpk1boi9n1eki86f9on27.apps.googleusercontent.com"
-        }
-      },
       "buildNumber": "1.4.0"
     },
     "android": {

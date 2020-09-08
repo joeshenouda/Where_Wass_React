@@ -80,7 +80,7 @@ class DialogInput extends Component{
                   clearButtonMode={(textProps && textProps.clearButtonMode)?textProps.clearButtonMode:'never'}
                   clearTextOnFocus={(textProps && textProps.clearTextOnFocus==true)?textProps.clearTextOnFocus:false}
                   keyboardType={(textProps && textProps.keyboardType)?textProps.keyboardType:'default'}
-                  maxLength = {(textProps && textProps.maxLength) ? textProps.maxLength:100}
+                  maxLength = {(textProps && textProps.maxLength) ? textProps.maxLength:10000}
                   autoFocus={true}
                   onKeyPress={() => this.setState({ opening: false })}
                   underlineColorAndroid='transparent'

@@ -240,26 +240,29 @@ export default class HomeScreen extends Component {
 
 		}
 		else{
+			//let displayName=null
 			let displayName = user.displayName
+			console.log('Your display name is: '+displayName)
 			if(displayName == null){
 				this.setState({isInputvisible : true, message:'name'})
 			}
+			else{
 
-			firebaseDatabase.ref('/wadies').child(user.uid).once('value', (snap) => {
-				let user_phoneNum=false
-				console.log(snap.val().phone)
-				if (snap.val().phone && snap.val().phone != ""){
+				firebaseDatabase.ref('/wadies').child(user.uid).once('value', (snap) => {
 					console.log(snap.val().phone)
-					user_phoneNum=true
-					
-					//Add to waitlist
-					let dateNow = new Date()
-					firebaseDatabase.ref('waitList').push({uid : user.uid, name : user.displayName, email : user.email, time : dateNow.toString(), phone : snap.val().phone})
-				}
-				else{
-					this.setState({isInputvisible : true, message : 'phone'})
-				}
-			})
+					if (snap.val().phone && snap.val().phone != ""){
+						console.log(snap.val().phone)
+						user_phoneNum=true
+						
+						//Add to waitlist
+						let dateNow = new Date()
+						firebaseDatabase.ref('waitList').push({uid : user.uid, name : user.displayName, email : user.email, time : dateNow.toString(), phone : snap.val().phone})
+					}
+					else{
+						this.setState({isInputvisible : true, message : 'phone'})
+					}
+				})
+			}
 		}	
 	}
 

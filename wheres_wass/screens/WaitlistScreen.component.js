@@ -58,6 +58,9 @@ class WaitlistScreen extends Component{
                     <TouchableOpacity  style={{width:35,borderRadius:50,justifyContent:'center',alignItems:'center', backgroundColor:'#D3D3D3'}} activeOpacity = {0.1} onPress={()=>Linking.openURL(`tel:${client.phone}`)}>
                             <FontAwesome name="phone" size={25}/>
                     </TouchableOpacity>
+                    <TouchableOpacity  style={{width:35,borderRadius:50,justifyContent:'center',alignItems:'center', backgroundColor:'#D3D3D3'}} activeOpacity = {0.1} onPress={()=>Linking.openURL(`sms:${client.phone}`)}>
+                            <FontAwesome name="comments" size={25}/>
+                    </TouchableOpacity>
                     <Text style = {{fontSize: 25}}>{client.name}</Text>
                     <Text style = {{fontSize : 20}}>{Math.round((((new Date() - Date.parse(client.time))%86400000) % 3600000)/60000)}m</Text>
                 </View>

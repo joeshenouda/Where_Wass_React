@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import { View, Text, SafeAreaView, FlatList, ActivityIndicator, Linking} from 'react-native';
+import { View, Text, SafeAreaView, FlatList, ActivityIndicator, Linking, TouchableOpacity, Alert} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import firebase from '../config';
 
@@ -11,7 +11,8 @@ class Clients extends Component{
         this.state = {
             arrayOfClients: [],
             limit:9,
-            lastVisible : null,
+            lastVisibleKey : null,
+            lastVisibleName : null,
             loading : false,
             refreshing : false
         }
@@ -42,7 +43,7 @@ class Clients extends Component{
         console.log('Retrieving Data')
         
         let nine_clients = []
-        firebaseDatabase.ref('wadies/').orderByKey().limitToFirst(50).once('value', (snap) => {
+        firebaseDatabase.ref('wadies/').orderByChild("username").limitToFirst(50).once('value', (snap) => {
 
             snap.forEach((childSnap) => {
                 client = childSnap.val()
@@ -51,12 +52,13 @@ class Clients extends Component{
             })
 
             console.log('\nretrieveData: Setting last visibile to: '+nine_clients[nine_clients.length-1].id)
-
+            console.log(nine_clients)
             this.setState({
                 arrayOfClients : nine_clients,
-                lastVisible : nine_clients[nine_clients.length-1].id,
+                lastVisibleKey : nine_clients[nine_clients.length-1].id,
+                lastVisibleName : nine_clients[nine_clients.length - 1].username,
                 loading : false
-            }, () => console.log('retrieveData: Last visible set to: '+this.state.lastVisible))
+            }, () => console.log('retrieveData: Last visible set to: '+this.state.lastVisibleName))
         })
 
     }
@@ -68,37 +70,41 @@ class Clients extends Component{
             })
 
             console.log('Retrieving more clients')
-            console.log("Last visible id was:" +this.state.lastVisible)
+            console.log("Last visible id was:" +this.state.lastVisibleKey)
 
             let nine_more = []
-            firebaseDatabase.ref('wadies/').orderByKey()
-            .startAt(this.state.lastVisible)
+            firebaseDatabase.ref('wadies/').orderByChild("username")
+            .startAt(this.state.lastVisibleName)
             .limitToFirst(50).once('value', (snap) => {
 
                 snap.forEach((childSnap) => {
-                    if (childSnap.key == this.state.lastVisible){
-                        console.log('Skipping double id')
+                    
+                    if (childSnap.key == this.state.lastVisibleKey || this.state.arrayOfClients.some(client => client.id == childSnap.key)){
+                        console.log("Skipping double id user "+childSnap.val().username+" with id "+childSnap.key)
                     }
                     else{
                         client = childSnap.val()
                         client['id'] = childSnap.key
+                        console.log("Adding "+childSnap.val().username+" with id "+childSnap.key)
                         nine_more.push(client)
                     }
                 })
-                let lastVisible = null
+                let lastVisibleKey = null
+                let lastVisibleName = null
                 if (nine_more[nine_more.length - 1] != undefined){
-                    lastVisible = nine_more[nine_more.length - 1].id
+                    lastVisibleKey = nine_more[nine_more.length - 1].id
+                    lastVisibleName = nine_more[nine_more.length-1].username
                 }
                 else{
-                    lastVisible = this.state.lastVisible
+                    lastVisibleKey = this.state.lastVisibleKey
                 }
-                console.log('\nretrieveMore: Setting last visibile to: '+lastVisible)
-
+                console.log('\nretrieveMore: Setting last visibile to: '+lastVisibleKey)
                 this.setState(prevState => ({
                     arrayOfClients : prevState.arrayOfClients.concat(nine_more),
-                    lastVisible : lastVisible,
+                    lastVisibleKey : lastVisibleKey,
+                    lastVisibleName : lastVisibleName,
                     refreshing : false
-                }),()=>console.log('retrieveMore: Last visible set to: '+this.state.lastVisible))
+                }),()=>console.log('retrieveMore: Last visible set to: '+this.state.lastVisibleKey))
                 console.log("Presented: "+this.state.arrayOfClients.length+" clients")
 
             })

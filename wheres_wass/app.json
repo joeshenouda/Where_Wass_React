@@ -3,7 +3,6 @@
     "name": "Where's Wass",
     "slug": "wheres_wass",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",

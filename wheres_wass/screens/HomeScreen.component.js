@@ -6,7 +6,8 @@ import firebase from '../config';
 import Modal from 'react-native-modal';
 import DialogInput from '../components/DialogInput';
 //For push notifications
-import { Notifications, SplashScreen } from 'expo';
+import { Notifications } from 'expo';
+import * as SplashScreen from 'expo-splash-screen';
 import * as Permissions from 'expo-permissions';
 
 //Initializing the database object from firebase
@@ -75,7 +76,7 @@ export default class HomeScreen extends Component {
 
 		this.waitListRef = firebaseDatabase.ref('waitList');
 
-		SplashScreen.preventAutoHide()
+		SplashScreen.preventAutoHideAsync()
 	}
 	//Called everytime a child changes on the database for the given day
 	listenForHours(isTomorrow) {
@@ -419,7 +420,7 @@ export default class HomeScreen extends Component {
 			return null
 		}
 		else{
-			SplashScreen.hide()
+			SplashScreen.hideAsync()
 		}
 		//Determine whether working next day or not
 		var workingTomorrow = this.state.tomorrowWorking == 'OFF' ? <Text style = {Homestyles.tomorrowStatus}>Tomorrow I am off</Text> :

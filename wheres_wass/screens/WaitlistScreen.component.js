@@ -95,7 +95,6 @@ class WaitlistScreen extends Component{
 
         FBWaitRef.orderByKey().on('child_added', (snap) => {
             var identifier;
-            console.log('Child added called for waitlistScreen')
             if (snap.val().name){
                 identifier = snap.val().name;
             }
@@ -124,7 +123,6 @@ class WaitlistScreen extends Component{
 
 
     componentDidMount(){
-        console.log('Called componentDidMount for waitlistScreen')
         setInterval(() => this.setState({now:new Date()}), 60000)
         this.listenForWaitList(this.waitRef)
     }

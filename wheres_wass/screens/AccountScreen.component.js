@@ -53,10 +53,6 @@ class Account extends Component{
 			);
 		
 			if (type === 'success'){
-				//Prints out permissions
-				console.log('Granted permissions are  '+permissions)
-				console.log('Declined permissions are '+declinedPermissions)
-
 				//Build firebase credentials with the Facebook access token
 				const credential = firebase.auth.FacebookAuthProvider.credential(token);
 		

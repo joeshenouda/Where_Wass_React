@@ -36,7 +36,6 @@ class DialogInput extends Component{
     }else{
       value = this.props.initValueTextInput ? this.props.initValueTextInput : '';
     }
-    console.log('Value is',value)
 
     let textProps = this.props.textInputProps || null;
     let modalStyleProps = this.props.modalStyle || {};

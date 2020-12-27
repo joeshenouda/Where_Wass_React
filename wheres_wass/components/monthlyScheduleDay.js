@@ -30,9 +30,6 @@ class MonthlyScheduleDay extends Component{
     }
     componentDidMount(){
         this.grabMonthlyHours()
-        console.log('The month given to me is '+this.props.month)
-        console.log('The day given to me is '+this.props.day)
-        console.log('The year given to me is '+this.props.year)
 
     }
     componentWillUnmount(){

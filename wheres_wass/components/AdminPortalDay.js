@@ -39,7 +39,6 @@ class AdminPortalDay extends Component{
     }
     let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     this.monthlyHoursRef=firebaseDatabase.ref('business_hours/'+months[this.state.month-1]+'/'+this.state.day)
-    console.log('Admin Portal day given was '+this.props.day)
   }
 
   updateAnnouncement(newAnnouncement){
@@ -111,7 +110,6 @@ class AdminPortalDay extends Component{
       }
     }
     else if(hour >= 12){
-      console.log('The hour is greater than 12 '+hour)
       if (hour == 12){
         hour=12
       }else{
@@ -129,7 +127,6 @@ class AdminPortalDay extends Component{
     let timeToUpdate = this.state.editingStart ? 'start_time' : 'end_time';
     
     //Setting the state according to which time was updated (start or end)
-    console.log('timeToUpdate is '+timeToUpdate)
     if(timeToUpdate == 'start_time'){
       if(Platform.OS==='ios'){
       this.setState({
@@ -196,7 +193,6 @@ class AdminPortalDay extends Component{
 
 		FBref.once('value', (snap) => {
       if(snap.child('start_time').exists() && snap.child('end_time').exists()){
-        console.log('Snap exists')
         this.setState({
           startTime : snap.child('start_time').val(),
           endTime : snap.child('end_time').val(),
@@ -204,7 +200,6 @@ class AdminPortalDay extends Component{
         })
       }
       else{
-        console.log('Snap does not exist')
         this.setState({
           startTime : 'Set Start Time',
           endTime : 'Set End Time',

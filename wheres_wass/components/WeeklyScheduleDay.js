@@ -89,7 +89,6 @@ class WeeklyScheduleDay extends Component{
   }
 
   render(){
-	console.log('WeeklyScheduleDay rendered')
 	
 	if (this.state.working){
 	    return(

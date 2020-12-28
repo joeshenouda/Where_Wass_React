@@ -6,7 +6,7 @@ import firebase from '../config';
 import Modal from 'react-native-modal';
 import DialogInput from '../components/DialogInput';
 //For push notifications
-import { Notifications } from 'expo';
+import * as Notifications from 'expo-notifications';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Permissions from 'expo-permissions';
 
@@ -20,24 +20,41 @@ let today = new Date()
 //object mapping uids to push ids
 let uid_to_pushRef = {}
 
+Notifications.setNotificationHandler({
+	handleNotification: async () => ({
+	  shouldShowAlert: true,
+	  shouldPlaySound: false,
+	  shouldSetBadge: false,
+	}),
+  });
+
+
 //Home component to show current hours
 export default class HomeScreen extends Component {
 	//For push notifications
 	 registerForPushNotificationsAsync = async() => {
-		const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+		//Get permissions for notifications
+		const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+
+		let finalStatus = existingStatus;
 		// only asks if permissions have not already been determined, because
 		// iOS won't necessarily prompt the user a second time.
 		// On Android, permissions are granted on app installation, so
 		// `askAsync` will never prompt the user
 
-		// Stop here if the user did not grant permissions
-		if (status !== 'granted') {
-		alert('No notification permissions!');
-		return;
+		// If existing status is not granted ask for Permission
+		if (existingStatus !== 'granted') {
+			const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+			finalStatus = status;
+		}
+
+		if (finalStatus !== 'granted') {
+			alert('Failed to get push token for push notification!');
+			return;
 		}
 	
 		// Get the token that identifies this device
-		let token = await Notifications.getExpoPushTokenAsync();
+		let token = (await Notifications.getExpoPushTokenAsync()).data;
 
 		if(firebase.auth().currentUser){
 			console.log('Adding to firebase databse expotoken')	

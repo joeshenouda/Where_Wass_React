@@ -35,6 +35,7 @@
     "android": {
       "package": "com.tsdot.sheno.where_wass",
       "versionCode": 6,
+      "useNextNotificationsApi": true,
       "googleServicesFile": "./google-services.json"
     },
     "description": ""

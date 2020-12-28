@@ -9,6 +9,7 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
+tunnel/
 
 # Contains firebase info
 config.js

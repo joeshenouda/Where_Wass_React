@@ -8,7 +8,7 @@
       "android",
       "web"
     ],
-    "version": "1.4.1",
+    "version": "1.4.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -34,7 +34,7 @@
     },
     "android": {
       "package": "com.tsdot.sheno.where_wass",
-      "versionCode": 6,
+      "versionCode": 7,
       "useNextNotificationsApi": true,
       "googleServicesFile": "./google-services.json"
     },
